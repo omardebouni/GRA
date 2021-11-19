@@ -38,7 +38,7 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
         cmpsd xmm5, xmm1,0
         movd rcx, xmm5
         cmp rcx, 0
-        je loop
+        jne loop
 
         movsd xmm0, xmm9
         ret
