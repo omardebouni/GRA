@@ -14,6 +14,8 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
     movsd xmm2, xmm0
     addsd xmm2,xmm1
     divsd xmm2,xmm3
+    mov rcx, 2
+    cvtsi2sd xmm10 ,rcx
     pxor xmm9, xmm9
 
     loop:
@@ -30,7 +32,7 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
         addsd xmm7, xmm8
         mulsd xmm6, xmm7
 
-        divsd xmm6, 2
+        divsd xmm6,
         addsd xmm9, xmm6
 
         cmpsd xmm5, xmm1
