@@ -73,7 +73,6 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
         addsd xmm7, xmm8 // xmm7 = f(b) + f(a)
         mulsd xmm6, xmm7 // xmm6 = (b-a) * (f(b) + f(a))
 
-        //divsd xmm6, xmm10 // xmm6 /= 2
         addsd xmm9, xmm6 // sumResult += xmm6
 
         dec r12 // for n Stellen, we iterate n-1 times. We decrement rsi until 0 is reached
