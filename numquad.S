@@ -50,7 +50,7 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
 
 
         movsd xmm0, xmm5 // xmm7 = f(b)
-        mulssd xmm0, xmm0
+        mulsd xmm0, xmm0
         //call rbx
         movsd xmm7, xmm0
 
