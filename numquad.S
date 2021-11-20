@@ -7,16 +7,18 @@
     .align 16
 numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
     // TODO: implement this function
-    //rdi <- fn
+    // rdi <- fn
     // xmm0 <- a
     // xmm1 <- b
     // rsi <- n
     // xmm2 <- schrittweite
     // xmm9 <- sumResult
     // xmm10 <- 2.0
+    // rbx <- fn, a copy, because rdi is temporary register
 
     //xmm4 <- left
     //xmm5 <- right
+
 
 
     cmp rsi, 2
@@ -43,11 +45,11 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
         subsd xmm6, xmm4
 
         movsd xmm0, xmm5 // xmm7 = f(b)
-        call rdi
+        call rbx
         movsd xmm7, xmm0
 
         movsd xmm0, xmm4 // xmm8 = f(a)
-        call rdi
+        call rbx
         movsd xmm8, xmm0
 
         addsd xmm7, xmm8 // xmm7 = f(b) + f(a)
