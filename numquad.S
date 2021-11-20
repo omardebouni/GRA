@@ -28,8 +28,6 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
     cmp r12, 2
     jl nan
 
-2,4,5,6,9
-
     dec r12 // to compute the schrittweite
     cvtsi2sd xmm3, r12
     movsd xmm2, xmm1 // move b to tmp register
