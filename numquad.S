@@ -46,7 +46,10 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
         movsd xmm6, xmm5 // xmm6 = (b-a)
         subsd xmm6, xmm4
 
-
+        sub rsp, 16
+        movq [rsp], xmm5
+        movq xmm5, [rsp]
+        add rsp, 16
 
 
         movsd xmm0, xmm5 // xmm7 = f(b)
