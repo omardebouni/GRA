@@ -33,7 +33,7 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
     cvtsi2sd xmm3, r12
     movsd xmm2, xmm1 // move b to tmp register
     subsd xmm2,xmm0 // tmp = b - a
-    divsd xmm2,xmm3 // tmp /= n
+    divsd xmm2,xmm3 // tmp /= (n-1)
 
     mov rcx, 2
     cvtsi2sd xmm10 ,rcx // for the division in the formula: (b−a)·(f(b)+f(a))/2
@@ -50,11 +50,13 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
         subsd xmm6, xmm4
 
         movsd xmm0, xmm5 // xmm7 = f(b)
+        sub rsp, 8
         call rbx
         movsd xmm7, xmm0
 
         movsd xmm0, xmm4 // xmm8 = f(a)
         call rbx
+        add rsp, 8
         movsd xmm8, xmm0
 
         addsd xmm7, xmm8 // xmm7 = f(b) + f(a)
