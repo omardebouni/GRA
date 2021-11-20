@@ -55,11 +55,13 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
         movsd [rsp+64], xmm9
 
         movsd xmm0, xmm5 // xmm7 = f(b)
-        call rbx
+        mulss xmm0, xmm0
+        //call rbx
         movsd xmm7, xmm0
 
         movsd xmm0, [rsp + 16] // xmm8 = f(a). First xmm0 = a (xmm4, which is saved in stack)
-        call rbx
+        mulss xmm0, xmm0
+        //call rbx
         movsd xmm8, xmm0
 
         movsd xmm2, [rsp] //restoring xmm values
