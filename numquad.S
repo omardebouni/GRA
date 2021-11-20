@@ -15,19 +15,22 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
     // xmm9 <- sumResult
     // xmm10 <- 2.0
     // rbx <- fn, a copy, because rdi is temporary register
+    // r12 <- n, a copy
 
     //xmm4 <- left
     //xmm5 <- right
 
 
     push rbx
-    mov rbx, rdi
+    push r12
+    mov rbx, rdi // copy of fn pointer
+    mov r12, rsi
 
-    cmp rsi, 2
+    cmp r12, 2
     jl nan
 
-    dec rsi // to compute the schrittweite
-    cvtsi2sd xmm3, rsi
+    dec r12 // to compute the schrittweite
+    cvtsi2sd xmm3, r12
     movsd xmm2, xmm1 // move b to tmp register
     subsd xmm2,xmm0 // tmp = b - a
     divsd xmm2,xmm3 // tmp /= n
@@ -60,17 +63,19 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
         divsd xmm6, xmm10 // xmm6 /= 2
         addsd xmm9, xmm6 // sumResult += xmm6
 
-        dec rsi // for n Stellen, we iterate n-1 times. We decrement rsi until 0 is reached
-        cmp rsi, 0
+        dec r12 // for n Stellen, we iterate n-1 times. We decrement rsi until 0 is reached
+        cmp r12, 0
         jne loop // repeat
 
         movsd xmm0, xmm9
+        pop r12
         pop rbx
         ret
 
     nan:
         pxor xmm0, xmm0
         divsd xmm0, xmm0
+        pop r12
         pop rbx
         ret
 
