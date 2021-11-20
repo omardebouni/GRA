@@ -6,7 +6,6 @@
 
     .align 16
 numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
-    // TODO: implement this function
     // rdi <- fn
     // xmm0 <- a
     // xmm1 <- b
@@ -49,15 +48,31 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
         movsd xmm6, xmm5 // xmm6 = (b-a)
         subsd xmm6, xmm4
 
+		sub rsp, 8 //stack alignment
+        sub rsp,6*16 //saving xmm registers
+        movsd [rsp], xmm2
+        movsd [rsp+16], xmm4
+        movsd [rsp+32], xmm5
+        movsd [rsp+48], xmm6
+        movsd [rsp+64], xmm9
+        movsd [rsp+80], xmm10
+
         movsd xmm0, xmm5 // xmm7 = f(b)
-        sub rsp, 8
         call rbx
         movsd xmm7, xmm0
 
-        movsd xmm0, xmm4 // xmm8 = f(a)
+        movsd xmm0, [rsp + 16] // xmm8 = f(a). First xmm0 = a (xmm4, which is saved in stack)
         call rbx
-        add rsp, 8
         movsd xmm8, xmm0
+
+        movsd xmm2, [rsp] //restoring xmm values
+        movsd xmm4, [rsp+16]
+        movsd xmm5, [rsp+32]
+        movsd xmm6, [rsp+48]
+        movsd xmm9, [rsp+64]
+        movsd xmm10, [rsp+80]
+        add rsp, 6*16
+        add rsp, 8 // remove alignment
 
         addsd xmm7, xmm8 // xmm7 = f(b) + f(a)
         mulsd xmm6, xmm7 // xmm6 = (b-a) * (f(b) + f(a))
