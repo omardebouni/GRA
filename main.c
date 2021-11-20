@@ -61,11 +61,13 @@ unsigned tests(void) {
     failed += !check(numquad(fn_x, -10, 10, 5), 0);
     failed += !check(numquad(fn_x, 0, 1, 2), 0.5);
     failed += !check(numquad(fn_x, 0, 1, 3), 0.5);
+    failed += !check(numquad(fn_x, 0, 1.5, 2), 1.125);
     failed += !check(numquad(fn_x, 0, 1, 200), 0.5);
     failed += !check(numquad(fn_x2, -3, 3, 2), 54);
     failed += !check(numquad(fn_x2, -3, 3, 3), 27);
     failed += !check(numquad(fn_x2, -3, 3, 4), 22);
     failed += !check(numquad(fn_x2, -3, 3, 13), 18.25);
+    failed += !check(numquad(fn_x2, -10, 10, 2), 2000.0);
 
     if (failed)
         printf("%u tests FAILED\n", failed);
