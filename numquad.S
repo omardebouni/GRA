@@ -80,11 +80,11 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
 
 
 
-        //movsd xmm0, xmm4 // xmm8 = f(a)
+        movsd xmm0, xmm4 // xmm8 = f(a)
+        mulsd xmm0, xmm0
         //call rbx
-        //movsd xmm8, xmm0
+        movsd xmm8, xmm0
 
-        movsd xmm0, xmm4
 
         movq xmm9, [rsp+64]
         movq xmm6, [rsp+48]
@@ -108,7 +108,7 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
         mov rcx, 2
         cvtsi2sd xmm10 ,rcx // for the division in the formula: (b−a)·(f(b)+f(a))/2
         divsd xmm9, xmm10
-        //movsd xmm0, xmm9
+        movsd xmm0, xmm9
 
         pop r12
         pop rbx
