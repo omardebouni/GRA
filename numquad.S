@@ -28,6 +28,8 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
     cmp r12, 2
     jl nan
 
+2,4,5,6,9
+
     dec r12 // to compute the schrittweite
     cvtsi2sd xmm3, r12
     movsd xmm2, xmm1 // move b to tmp register
@@ -46,12 +48,18 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
         movsd xmm6, xmm5 // xmm6 = (b-a)
         subsd xmm6, xmm4
 
-        sub rsp, 16*2
-        movq [rsp], xmm5
+        sub rsp, 16*5
+        movq [rsp], xmm2
         movq [rsp+16], xmm4
+        movq [rsp+32], xmm5
+        movq [rsp+48], xmm6
+        movq [rsp+64], xmm9
+        movq xmm9, [rsp+64]
+        movq xmm6, [rsp+48]
+        movq xmm5, [rsp+32]
         movq xmm4, [rsp+16]
-        movq xmm5, [rsp]
-        add rsp, 16*2
+        movq xmm2, [rsp]
+        add rsp, 16*5
 
 
         movsd xmm0, xmm5 // xmm7 = f(b)
