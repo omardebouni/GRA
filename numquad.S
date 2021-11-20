@@ -49,26 +49,27 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
 		sub rsp, 8 //stack alignment
         sub rsp,5*16 //saving xmm registers
         movsd [rsp], xmm2
-        movsd [rsp+16], xmm4
-        movsd [rsp+32], xmm5
-        movsd [rsp+48], xmm6
-        movsd [rsp+64], xmm9
+        movsd [rsp+16], xmm5
+        movsd [rsp+32], xmm6
+        movsd [rsp+48], xmm9
+        movsd [rsp+64], xmm4
+
 
         movsd xmm0, xmm5 // xmm7 = f(b)
         mulss xmm0, xmm0
         //call rbx
         movsd xmm7, xmm0
 
-        movsd xmm0, [rsp + 16] // xmm8 = f(a). First xmm0 = a (xmm4, which is saved in stack)
+        movsd xmm0, [rsp + 64] // xmm8 = f(a). First xmm0 = a (xmm4, which is saved in stack)
         mulss xmm0, xmm0
         //call rbx
         movsd xmm8, xmm0
 
-        movsd xmm2, [rsp] //restoring xmm values
-        movsd xmm4, [rsp+16]
-        movsd xmm5, [rsp+32]
-        movsd xmm6, [rsp+48]
-        movsd xmm9, [rsp+64]
+        movsd xmm4, [rsp+64] //restoring xmm values
+        movsd xmm9, [rsp+48]
+        movsd xmm6, [rsp+32]
+        movsd xmm5, [rsp+16]
+        movsd xmm2, [rsp]
         add rsp, 5*16
         add rsp, 8 // remove alignment
 
