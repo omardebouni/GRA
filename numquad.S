@@ -54,10 +54,9 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
         divsd xmm6, xmm10 // xmm6 /= 2
         addsd xmm9, xmm6 // sumResult += xmm6
 
-        cmpsd xmm5, xmm1, 0 // check equality of actual b and current b
-        movd rcx, xmm5 // if true, 0xFFFFFFFFH will be stored in rcx, else 00000000H
-        cmp rcx, 0
-        je loop // repeat if actual b was not yet reached
+        dec rsi // for n Stellen, we iterate n-1 times. We decrement rsi until 0 is reached
+        cmp rsi, 0
+        jne loop // repeat
 
         movsd xmm0, xmm9
         ret
