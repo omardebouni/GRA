@@ -108,7 +108,7 @@ Func get_fn(const char* fn_name) {
 
 int main(int argc, char** argv) {
     /* Uncomment the following line if you just want to run tests */
-    return tests() ? EXIT_FAILURE : EXIT_SUCCESS;
+    //return tests() ? EXIT_FAILURE : EXIT_SUCCESS;
 
     const char* progname = argv[0];
 
