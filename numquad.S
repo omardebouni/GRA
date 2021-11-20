@@ -81,8 +81,7 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
 
 
         movsd xmm0, xmm4 // xmm8 = f(a)
-        mulsd xmm0, xmm0
-        //call rbx
+        call rbx
         movsd xmm8, xmm0
 
 
