@@ -96,7 +96,7 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
 
 
         addsd xmm7, xmm8 // xmm7 = f(b) + f(a)
-        movsd xmm0, xmm7
+        movsd xmm0, xmm8
         mulsd xmm6, xmm7 // xmm6 = (b-a) * (f(b) + f(a))
 
         addsd xmm9, xmm6 // sumResult += xmm6
