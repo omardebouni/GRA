@@ -34,8 +34,6 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
     subsd xmm2,xmm0 // tmp = b - a
     divsd xmm2,xmm3 // tmp /= (n-1)
 
-    mov rcx, 2
-    cvtsi2sd xmm10 ,rcx // for the division in the formula: (b−a)·(f(b)+f(a))/2
     pxor xmm9, xmm9 // sumResult = 0
     movsd xmm5, xmm0 // init right=a
 
@@ -49,13 +47,12 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
         subsd xmm6, xmm4
 
 		sub rsp, 8 //stack alignment
-        sub rsp,6*16 //saving xmm registers
+        sub rsp,5*16 //saving xmm registers
         movsd [rsp], xmm2
         movsd [rsp+16], xmm4
         movsd [rsp+32], xmm5
         movsd [rsp+48], xmm6
         movsd [rsp+64], xmm9
-        movsd [rsp+80], xmm10
 
         movsd xmm0, xmm5 // xmm7 = f(b)
         call rbx
@@ -70,8 +67,7 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
         movsd xmm5, [rsp+32]
         movsd xmm6, [rsp+48]
         movsd xmm9, [rsp+64]
-        movsd xmm10, [rsp+80]
-        add rsp, 6*16
+        add rsp, 5*16
         add rsp, 8 // remove alignment
 
         addsd xmm7, xmm8 // xmm7 = f(b) + f(a)
@@ -84,7 +80,11 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
         cmp r12, 0
         jne loop // repeat
 
+
+        mov rcx, 2
+        cvtsi2sd xmm10 ,rcx // for the division in the formula: (b−a)·(f(b)+f(a))/2
         movsd xmm0, xmm9
+        divsd xmm0, xmm10
         pop r12
         pop rbx
         ret
