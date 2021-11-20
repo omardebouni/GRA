@@ -69,11 +69,28 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
         add rsp, 8
 
 
+
+        sub rsp, 8
+        sub rsp, 16*5
+        movq [rsp], xmm2
+        movq [rsp+16], xmm4
+        movq [rsp+32], xmm5
+        movq [rsp+48], xmm6
+        movq [rsp+64], xmm9
+
+
+
         movsd xmm0, xmm4 // xmm8 = f(a). First xmm0 = a (xmm4, which is saved in stack)
-        mulsd xmm0, xmm0
-        //call rbx
+        call rbx
         movsd xmm8, xmm0
 
+        movq xmm9, [rsp+64]
+        movq xmm6, [rsp+48]
+        movq xmm5, [rsp+32]
+        movq xmm4, [rsp+16]
+        movq xmm2, [rsp]
+        add rsp, 16*5
+        add rsp, 8
 
 
         addsd xmm7, xmm8 // xmm7 = f(b) + f(a)
