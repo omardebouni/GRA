@@ -46,6 +46,7 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
         movsd xmm6, xmm5 // xmm6 = (b-a)
         subsd xmm6, xmm4
 
+        sub rsp, 8
         sub rsp, 16*5
         movq [rsp], xmm2
         movq [rsp+16], xmm4
@@ -65,6 +66,7 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
         movq xmm4, [rsp+16]
         movq xmm2, [rsp]
         add rsp, 16*5
+        add rsp, 8
 
 
         movsd xmm0, xmm4 // xmm8 = f(a). First xmm0 = a (xmm4, which is saved in stack)
