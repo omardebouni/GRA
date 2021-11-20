@@ -42,11 +42,13 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
         movsd xmm6, xmm5 // xmm6 = (b-a)
         subsd xmm6, xmm4
 
-        movsd xmm7, xmm5 // xmm7 = f(b)
-        mulsd xmm7, xmm7 // x^2
+        movsd xmm0, xmm5 // xmm7 = f(b)
+        call rdi
+        movsd xmm7, xmm0
 
-        movsd xmm8, xmm4 // xmm8 = f(a)
-        mulsd xmm8, xmm8 // x^2
+        movsd xmm0, xmm4 // xmm8 = f(a)
+        call rdi
+        movsd xmm8, xmm0
 
         addsd xmm7, xmm8 // xmm7 = f(b) + f(a)
         mulsd xmm6, xmm7 // xmm6 = (b-a) * (f(b) + f(a))
