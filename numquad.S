@@ -20,6 +20,8 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
     //xmm5 <- right
 
 
+    push rbx
+    mov rbx, rdi
 
     cmp rsi, 2
     jl nan
@@ -63,11 +65,13 @@ numquad: // double numquad(double(* f)(double), double a, double b, size_t n)
         jne loop // repeat
 
         movsd xmm0, xmm9
+        pop rbx
         ret
 
     nan:
         pxor xmm0, xmm0
         divsd xmm0, xmm0
+        pop rbx
         ret
 
 
