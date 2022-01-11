@@ -121,7 +121,11 @@
          }
      }
      if (argc - optind == 1) {
-         x = strtof(argv[optind], &str_err);
+         if (argv[optind][0] == '-') {
+          x = strtof(&argv[optind][1], &str_err);
+          x *= -1;
+         }
+         else x = strtof(argv[optind], &str_err);
          if (*str_err != '\0')
              print_help("The given value couldn't be parsed. Please use the following format!\n");
      } else print_help(NULL);
