@@ -117,7 +117,7 @@
                  print_help(NULL);
                  break;
              default:
-                 print_help(NULL);
+                 print_help("TESTTSTSTT\n");
          }
      }
      if (argc - optind == 1) {
