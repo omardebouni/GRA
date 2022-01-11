@@ -6,7 +6,7 @@ all:	main	correctness
 main:	main.c	custom_math.c
 			$(CC)	$(CFLAGS)	-o	$@	$^	-lm	-g
 			
-correctness: correctness_check.c main.c
+correctness: correctness_check.c main.c custom_math.c
 			$(CC)	$(CFLAGS)	-o	$@	$^	-lm	-g
 clean:
 			rm	-f	./main 
