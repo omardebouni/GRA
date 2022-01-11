@@ -1,8 +1,9 @@
-# Add additional compiler flags here
-CFLAGS=-std=gnu11 -O3 -Wall -Wextra -Wpedantic
+CC=gcc
+CFLAGS=-O3 -Wall -Wextra -std=c17 -Wpedantic
 
-.PHONY: all clean
-all: main
-main: main.c numquad.S
+.PHONY: clean	main
+all:	main 
+main:	main.c	custom_math.c
+			$(CC)	$(CFLAGS)	-o	$@	$^	-lm	-g
 clean:
-	rm -f main
+			rm	-f	./main 
