@@ -1,136 +1,189 @@
-
-#include <stdbool.h>
-#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <tgmath.h>
+#include <stdbool.h>
+#include <math.h>
+#include <unistd.h>
+#include <getopt.h>
+#include "custom_math.h"
 
-#include "numquad.h"
+/* Variablen für die zu verwendende Version, und den übergebenen X Wert */
+long version = 0, precision = 20;
+double x;
+/* Falls gesetzt, wird eine Performanz/Laufzeit Analyse ausgeführt, und die gemessene Zeiten ausgegeben */
+bool analysis = false;
+long iterations = 1; //default
 
+void handle_args(int argc, char **argv);
 
-const char* usage_msg = 
-    "Usage: %s [options] fn   Approximate fn's integral\n"
-    "   or: %s -t             Run tests and exit\n"
-    "   or: %s -h             Show help message and exit\n";
+void print_help(char *message);
 
-const char* help_msg =
-    "Positional arguments:\n"
-    "  fn   The function to integrate. One of {fn_1,fn_x,fn_x2}.\n"
-    "\n"
-    "Optional arguments:\n"
-    "  -a X   The start of the integration interval (default: X = 0.0)\n"
-    "  -b X   The end of the integration interval (default: X = 1.0)\n"
-    "  -n N   The number of sampling points (default: N = 2)\n"
-    "  -t     Run tests and exit\n"
-    "  -h     Show help message (this text) and exit\n";
+// speichert die Werte für die Lookup-Tabelle  
+// TODO: Bestimme einen besserten Wert statt 10000
+// TODO: Verwende Preprocessor
+double lookup_values[10000];
 
-void print_usage(const char* progname) {
-    fprintf(stderr, usage_msg, progname, progname, progname);
+/*Die Funktion implementiert die Formel für ein bestimmtes x mithilfe einer reinen
+Reihendarstellung und gibt das Ergebnis zurück
+https://proofwiki.org/wiki/Power_Series_Expansion_for_Real_Area_Hyperbolic_Sine */
+double approxArsinh_series(double x, int precision) {
+    double absX = customAbs(x);
+    double result = 0;
+    double dividend, divisor;
+    if (absX <= 1) {
+        for (int n = 0; n < precision; n++) {
+            dividend = sign(n) * customFactorial(2 * n) * customPow(x, 2 * n + 1);
+            divisor = customPow(2, 2 * n) * customPow(customFactorial(n), 2) * (2 * n + 1);
+            result += (dividend / divisor);
+        }
+    } else if (x >= 1) {
+        for (int n = 1; n < precision; n++) {
+            dividend = sign(n) * customFactorial(2 * n);
+            divisor = customPow(2, 2 * n) * customPow(customFactorial(n), 2) * (2 * n) * customPow(x, 2 * n);
+            result += (dividend / divisor);
+        }
+        result = customLn(2 * x) - result;
+    } else if (x <= -1) {
+        for (int n = 0; n < precision; n++) {
+            dividend = customPow(-1, n) * customFactorial(2 * n);
+            divisor = customPow(2, 2 * n) * customPow(customFactorial(n), 2) * (2 * n) * customPow(x, 2 * n);
+            if (divisor != 0) {
+                result += (dividend / divisor);
+            }
+        }
+        result = -customLn(-2 * x) + result;
+    }
+    return result;
 }
 
-void print_help(const char* progname) {
-    print_usage(progname);
-    fprintf(stderr, "\n%s", help_msg);
+/*Die Funktion implementiert die Formel für ein bestimmtes x mithilfe eines Tabellen-
+Lookups.*/
+double approxArsinh_lookup(double x, int precision) {
+    double absX = customAbs(x);
+    double result = 0;
+    double dividend, divisor;
+    if (absX <= 1) {
+        for (int n = 0; n < precision; n++) {
+            dividend = lookup_values[n] * customPow(x, 2 * n + 1);
+            divisor = (2 * n + 1);
+            result += (dividend / divisor);
+        }
+    } else if (x >= 1) {
+        for (int n = 1; n < precision; n++) {
+            dividend = lookup_values[n];
+            divisor = (2 * n) * customPow(x, 2 * n);
+            result += (dividend / divisor);
+        }
+        result = customLn(2 * x) - result;
+    } else if (x <= -1) {
+        for (int n = 0; n < precision; n++) {
+            dividend = lookup_values[n];
+            divisor = (2 * n) * customPow(x, 2 * n);
+            if (divisor != 0) {
+                result += (dividend / divisor);
+            }
+        }
+        result = -customLn(-2 * x) + result;
+    }
+    return result;
 }
 
 
-static double fn_1(double x) {
-    (void) x;
-    return 1.0;
+int main(int argc, char **argv) {
+    handle_args(argc, argv);
+    double result = 0;
+    // TODO: Verwende Preprocessor
+
+    // die gewählte Version aufrufen
+    switch (version) {
+        case 0:
+            result = approxArsinh_series(x, precision);
+            break;
+        case 1:
+            initializeLookupArray(lookup_values, precision);
+            result = approxArsinh_lookup(x, precision);
+            break;
+        case 2:
+            break;
+            //case ..
+            //     ..
+            //     ..
+        default:
+            print_help("Die gewählte Version ist nicht vorhanden!\n");
+    }
+
+    printf("Value of result = %f\n", result);
+    printf("finished\n");
+    return 0;
 }
 
-static double fn_x(double x) {
-    return x;
-}
+void handle_args(int argc, char **argv) {
+    if (argc < 2) print_help("Keine Eingabe. Bitte nutzen Sie folgendes Format!\n");
 
+    /* option speichert das char, das die Option spezifiziert */
+    char option;
+    int v_flag = 0, b_flag = 0, p_flag = 0; // User kann nur die Optionen je nur einmal benutzen
+    char *str_err;
 
-#define check(stmt, exp) check_impl(#stmt, stmt, exp)
-// Returns true when val is approx. equal to exp.
-static bool check_impl(const char* name, double val, double exp) {
-    bool ok = fabs(val - exp) < 0.0000001;
-    printf("%s: %s (%f) == %f\n", "not ok" + (4 * ok), name, val, (double) exp);
-    return ok;
-}
-
-unsigned tests(void) {
-    unsigned failed = 0;
-    // Note: cases with n<2 are not tested here.
-//    failed += !check(numquad(fn_x, 0, 1, 3), 0.5);
-//    failed += !check(numquad(fn_x, 0, 1.5, 2), 1.125);
-    failed += !check(numquad(fn_x2, -10, 10, 2), 2000.0);
-
-
-//    failed += !check(numquad(fn_1, -10, 10, 2), 20);
-//    failed += !check(numquad(fn_1, -10, 10, 3), 20);
-//    failed += !check(numquad(fn_x, -10, 10, 5), 0);
-//    failed += !check(numquad(fn_x, 0, 1, 2), 0.5);
-//    failed += !check(numquad(fn_x, 0, 1, 200), 0.5);
-    failed += !check(numquad(fn_x2, -3, 3, 2), 54);
-    failed += !check(numquad(fn_x2, -3, 3, 3), 27);
-    failed += !check(numquad(fn_x2, -3, 3, 4), 22);
-    failed += !check(numquad(fn_x2, -3, 3, 13), 18.25);
-
-    if (failed)
-        printf("%u tests FAILED\n", failed);
-    else
-        printf("All tests PASSED\n");
-
-    return failed;
-}
-
-
-typedef double(* Func)(double);
-
-struct FnOption {
-    const char* name;
-    Func fn;
-};
-
-const struct FnOption fn_options[] = {
-    { "fn_1", fn_1 },
-    { "fn_x", fn_x },
-    { "fn_x2", fn_x2 },
-    // feel free to add more options here
-};
-
-Func get_fn(const char* fn_name) {
-    for(size_t i = 0; i < (sizeof fn_options) / (sizeof *fn_options); i++) {
-        const struct FnOption* fn_option = &fn_options[i];
-        if (!strcmp(fn_option->name, fn_name)) {
-            return fn_option->fn;
+    while ((option = getopt(argc, argv, ":p:V:B::h")) != -1) {
+        switch (option) {
+            case 'V':
+                if (v_flag++ > 0) print_help("Die Version darf nur einmal angegeben werden\n"); //Programm beenden
+                version = strtol(optarg, &str_err, 10);
+                if (*str_err != '\0') print_help("Die angegeben Version konnte nicht geparst werden\n");
+                break;
+            case 'B':
+                if (b_flag++ > 0) print_help("Die -B Option darf nur einmal angegeben werden\n"); //Programm beenden
+                analysis = true;
+                if (optarg != NULL) {
+                    iterations = strtol(optarg, &str_err, 10);
+                    if (*str_err != '\0') print_help(NULL);
+                }
+                break;
+            case 'p':
+                if (p_flag++ > 0)
+                    print_help("Die Precision-Option darf nur einmal angegeben werden\n"); //Programm beenden
+                precision = strtol(optarg, &str_err, 10);
+                if (*str_err != '\0') print_help(NULL);
+                break;
+            case ':':
+                fprintf(stderr, "Argument für %c fehlt!\n", optopt);
+                print_help(NULL);
+                break;
+            default:
+                print_help(NULL);
         }
     }
-
-    return NULL;
+    if (argc - optind == 1) {
+        x = strtof(argv[optind], &str_err);
+        if (*str_err != '\0')
+            print_help("Der gegebene Wert konnte nicht geparst werden. Bitte nutzen Sie folgendes Format!\n");
+    } else print_help(NULL);
 }
 
-
-int main(int argc, char** argv) {
-    /* Uncomment the following line if you just want to run tests */
-    return tests() ? EXIT_FAILURE : EXIT_SUCCESS;
-
-    const char* progname = argv[0];
-
-    if (argc == 1) {
-        print_usage(progname);
-        return EXIT_FAILURE;
-    }
-
-    double a = 0.0, b = 1.0;
-    size_t n = 2;
-
-    const char* fn_name = "fn_x";
-    Func fn = get_fn(fn_name);
-    if (!fn) {
-        fprintf(stderr, "%s: Invalid value for 'fn' -- %s\n", progname,
-                fn_name);
-        print_usage(progname);
-        return EXIT_FAILURE;
-    }
-
-    printf("numquad(%s, %f, %f, %zu) = %f\n", fn_name, a, b, n,
-           numquad(fn, a, b, n));
-
-    return EXIT_SUCCESS;
+void print_help(char *message) {
+    if (message != NULL) fprintf(stderr, "%s", message);
+    char *help_msg = "Default: \n\t"
+                     "Verwendung: ./arsinh <float>\n\n"
+                     "Optionen:\n\t"
+                     "-V<int>\t-- Die Implementierung, die verwendet werden soll.\n\t"
+                     "       \t   Mögliche Eingaben: V0-V3\n\n\t"
+                     "-B<int>\t-- Falls gesetzt, wird die Laufzeit dazu\n\t"
+                     "       \t   angemessen und ausgegeben. Das Argument  dieser\n\t"
+                     "       \t   Option ist optional, und gibt die Anzahl an\n\t"
+                     "       \t   Wiederholungen des Funktionsaufruf an.\n\n\t"
+                     "-p<int>\t   Die gewünschte Precision. Eine höhere Precision\n\t"
+                     "       \t   führt zu einer höheren Laufzeit, und genauerem \n\t"
+                     "       \t   Ergebnis\n\n\t"
+                     "-h     \t-- Gibt eine Beschreibung zur Verwendung des\n\t"
+                     "--help \t   Programms und allen Optionen, bzw. Beispiele.\n\n\t"
+                     "Verwendung: ./arsinh <float> -V<int> -B<int> -p<int>\n\t\t    "
+                     "./arsinh -h\n\n"
+                     "Beispielaufrufe:\n\t"
+                     "./arsinh 2.0\n\t"
+                     "./arsinh 2.0 -p20\n\t"
+                     "./arsinh 1.5 -V0\n\t"
+                     "./arsinh -V2 3.14159 -B -p10\n\t"
+                     "./arsinh 5 -B2\n";
+    fprintf(stderr, "%s", help_msg);
+    exit(1);
 }
