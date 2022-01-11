@@ -15,7 +15,7 @@ void help(char *message) {
                 "[a,b] ist der Interval, in dem die Implementierung getestet wird\n"
                 "-s gibt die Schrittweite\n"
                 "-p gibt die gewünschte Präzision\n"
-    fprintf(stderr, msg);
+    fprintf(stderr,"%s", msg);
     exit(1);
 }
 
