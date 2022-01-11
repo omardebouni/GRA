@@ -55,9 +55,9 @@ void handle(int argc, char **argv) {
         }
     }
     if (argc - optind == 1) {
-        x = strtof(argv[optind], &str_err);
-        if (*str_err != '\0') print_help(NULL);
-    } else print_help(NULL);
+        epsilon = strtof(argv[optind], &str_err);
+        if (*str_err != '\0') help(NULL);
+    } else help(NULL);
 }
 
 
@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
     int sum = 0;
     printf("Running test for values in [%f, %f] with step size of %f...\n", a, b, step);
     for (double i = a; i <= b; i += step) {
-        if ((approxArsinh_series(i, precision) - arsinh(i) > epsilon) sum++;
+        if ((approxArsinh_series(i, precision) - asinh(i)) > epsilon) sum++;
     }
     printf("Done.\nTotal test failed: %d\n", sum);
 
