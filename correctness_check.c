@@ -14,7 +14,7 @@ void help(char *message) {
                 "Der erste Wert ist Epsilon, und entspricht die gewünschte Genauigkeit\n"
                 "[a,b] ist der Interval, in dem die Implementierung getestet wird\n"
                 "-s gibt die Schrittweite\n"
-                "-p gibt die gewünschte Präzision\n"
+                "-p gibt die gewünschte Präzision\n";
     fprintf(stderr,"%s", msg);
     exit(1);
 }
