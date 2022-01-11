@@ -3,6 +3,7 @@
 #include <math.h>
 #include <getopt.h>
 #include "main.h"
+#include "custom_math.h"
 
 double epsilon, a, b, step;
 int precision;
