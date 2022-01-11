@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <getopt.h>
 #include "custom_math.h"
+#include "main.h"
 
 /* Variablen für die zu verwendende Version, und den übergebenen X Wert */
 long version = 0, precision = 20;
