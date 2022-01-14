@@ -235,7 +235,7 @@ void run_test() {
             expected = asinh(i);
             if ((got - expected >= epsilon)) {
                 failed++;
-                if (print) printf("asinh(%lf):\n\tGot:       %lf\n\tExpected: %lf\n", i, got, expected);
+                if (print) printf("asinh(%lf):\n\tGot:      %lf\n\tExpected: %lf\n", i, got, expected);
             }
         }
         printf("Done.\nTotal tests passed: %d/%d\n", (total-failed), total);
