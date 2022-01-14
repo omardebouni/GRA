@@ -233,12 +233,12 @@ void run_test() {
         for (double i = a; i <= b; i += step_size) {
             got = approxArsinh_series(i, 20);
             expected = asinh(i);
-            if ((got - expected > epsilon)) {
+            if ((got - expected >= epsilon)) {
                 failed++;
-                if (print) printf("asinh(%lf):\n\tGot: %lf\n\tExpected: %lf\n", i, got, expected);
+                if (print) printf("asinh(%lf):\n\tGot:       %lf\n\tExpected: %lf\n", i, got, expected);
             }
         }
-        printf("Done.\nTotal test passed: %d/%d\n", (total-failed), total);
+        printf("Done.\nTotal tests passed: %d/%d\n", (total-failed), total);
 
 
         while (1) {
