@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
+#include <string.h>
 #include <unistd.h>
 //#include <iostream>
 #include <getopt.h>
@@ -194,23 +195,36 @@ void print_help(char *message) {
 void run_test() {
     printf("Running Analysis on the correctness of the approximation function ...\n");
     double epsilon, a, b, step_size;
-    printf("Enter the desired precession to compare with: ");
-    scanf("%lf", &epsilon);
-    printf("Enter the desired interval boundaries to be tested in starting with the left_bound: ");
-    scanf("%lf", &a);
-    printf("And the right_bound: ");
-    scanf("%lf", &b);
-    printf("Enter step size: ");
-    scanf("%lf", &step_size);
-    system("clear");
-    printf("Running test for values in [%f, %f] with step size of %f...\n", a, b, step_size);
+    int end = 0;
+    char buf[5];
+    while (!end) {
+        printf("Enter the desired precession to compare with: ");
+        scanf("%lf", &epsilon);
+        printf("Enter the desired interval boundaries to be tested in starting with the left_bound: ");
+        scanf("%lf", &a);
+        printf("And the right_bound: ");
+        scanf("%lf", &b);
+        printf("Enter step size: ");
+        scanf("%lf", &step_size);
+        system("clear");
+        printf("Running test for values in [%f, %f] with step size of %f...\n", a, b, step_size);
 
-    int sum = 0;
-    for (double i = a; i <= b; i += step_size) {
-        if ((approxArsinh_series(i, 20) - asinh(i) > epsilon)) sum++;
+        int sum = 0;
+        for (double i = a; i <= b; i += step_size) {
+            if ((approxArsinh_series(i, 20) - asinh(i) > epsilon)) sum++;
+        }
+        printf("Done.\nTotal test failed: %d\n", sum);
+        while (1) {
+            printf("Run again? (yes/no)\n");
+            scanf("%s", buf);
+            if (strcmp(buf, "yes")) break;
+            else if (strcmp(buf, "no") == 0) {
+                end = 1;
+                break;
+            }
+        }
+
     }
-    printf("Done.\nTotal test failed: %d\n", sum);
 
     exit(0);
 }
-
