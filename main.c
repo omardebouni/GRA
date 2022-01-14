@@ -195,36 +195,58 @@ void print_help(char *message) {
 void run_test() {
     printf("Running Analysis on the accuracy of the approximation function ...\n");
     double epsilon, a, b, step_size;
-    int end = 0;
+    int end = 0, print = 0;
+    int precession;
     char buf[10];
+    double got, expected;
+    int silence; // silence warnings
     while (!end) {
-        printf("Enter the desired precession to compare with: ");
-        scanf("%lf", &epsilon);
+        printf("Enter the desired accuracy to compare with: ");
+        silence = scanf("%lf", &epsilon);
         printf("Enter the desired interval boundaries to be tested in starting with the left_bound: ");
-        scanf("%lf", &a);
+        silence = scanf("%lf", &a);
         printf("And the right_bound: ");
-        scanf("%lf", &b);
+        silence = scanf("%lf", &b);
         printf("Enter step size: ");
-        scanf("%lf", &step_size);
-        system("clear");
-        printf("Running test for values in [%f, %f] with step size of %f...\n", a, b, step_size);
+        silence = scanf("%lf", &step_size);
+        printf("Enter precession: ");
+        silence = scanf("%d", &precession);
+
+        while (1) {
+            printf("Print failed values? (yes/no)\n");
+            silence = scanf("%s", buf);
+            if (strcmp(buf, "yes") == 0) {
+                print = 1;
+                break;
+            }
+            else if (strcmp(buf, "no") == 0) break;
+        }
+
+        silence = system("clear");
+        printf("Running test for values in [%lf, %lf]\nStep size: %lf\nAccuracy:%lf\n", a, b, step_size, epsilon);
 
         int sum = 0;
         for (double i = a; i <= b; i += step_size) {
-            if ((approxArsinh_series(i, 20) - asinh(i) > epsilon)) sum++;
+            got = approxArsinh_series(i, 20);
+            expected = asinh(i);
+            if ((got - expected > epsilon)) sum++;
+            if (print) printf("asinh(%lf):\n\tGot: %lf\n\tExpected: %lf\n", i, got, expected);
+
         }
         printf("Done.\nTotal test failed: %d\n", sum);
+
+
         while (1) {
             printf("Run again? (yes/no)\n");
-            scanf("%s", buf);
+            silence = scanf("%s", buf);
             if (strcmp(buf, "yes") == 0) break;
             else if (strcmp(buf, "no") == 0) {
                 end = 1;
                 break;
             }
         }
-
     }
+    printf("Analysis ended.\n");
 
     exit(0);
 }
