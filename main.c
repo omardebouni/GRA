@@ -193,10 +193,10 @@ void print_help(char *message) {
 }
 
 void run_test() {
-    printf("Running Analysis on the correctness of the approximation function ...\n");
+    printf("Running Analysis on the accuracy of the approximation function ...\n");
     double epsilon, a, b, step_size;
     int end = 0;
-    char buf[5];
+    char buf[10];
     while (!end) {
         printf("Enter the desired precession to compare with: ");
         scanf("%lf", &epsilon);
@@ -217,7 +217,7 @@ void run_test() {
         while (1) {
             printf("Run again? (yes/no)\n");
             scanf("%s", buf);
-            if (strcmp(buf, "yes")) break;
+            if (strcmp(buf, "yes") == 0) break;
             else if (strcmp(buf, "no") == 0) {
                 end = 1;
                 break;
@@ -228,3 +228,4 @@ void run_test() {
 
     exit(0);
 }
+
