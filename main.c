@@ -191,6 +191,26 @@ void print_help(char *message) {
     fprintf(stderr, "%s", help_msg);
     exit(1);
 }
+void read_double(double *buf){
+    if(scanf("%lf", buf) == EOF) {
+        printf(stderr, "Error while reading input!\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+void read_int(int* buf){
+    if(scanf("%d", buf) == EOF) {
+        printf(stderr, "Error while reading input!\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+void read_str(char* buf){
+    if(scanf("%s", buf) == EOF) {
+        printf(stderr, "Error while reading input!\n");
+        exit(EXIT_FAILURE);
+    }
+}
 
 void run_test() {
     printf("Running Analysis on the accuracy of the approximation function ...\n");
@@ -200,22 +220,21 @@ void run_test() {
     int total, failed;
     char buf[10];
     double got, expected;
-    int silence; // silence warnings
     while (!end) {
         printf("Enter the desired accuracy to compare with: ");
-        silence = scanf("%lf", &epsilon);
+        read_double(&epsilon);
         printf("Enter the desired interval boundaries to be tested in starting with the left_bound: ");
-        silence = scanf("%lf", &a);
+        read_double(&a);
         printf("And the right_bound: ");
-        silence = scanf("%lf", &b);
+        read_double(&b);
         printf("Enter step size: ");
-        silence = scanf("%lf", &step_size);
+        read_double(&step_size);
         printf("Enter precession: ");
-        silence = scanf("%d", &precession);
+        read_int(&precession);
 
         while (1) {
             printf("Print failed values? (yes/no)\n");
-            silence = scanf("%s", buf);
+            read_str(buf);
             if (strcmp(buf, "yes") == 0) {
                 print = 1;
                 break;
@@ -225,7 +244,7 @@ void run_test() {
             }
         }
 
-        silence = system("clear");
+        if (system("clear") == -1)exit(-1); // just to silence warning
         printf("Running test for values in [%lf, %lf]\nStep size: %lf\nAccuracy:%lf\n", a, b, step_size, epsilon);
 
         failed = 0;
@@ -243,7 +262,7 @@ void run_test() {
 
         while (1) {
             printf("Run again? (yes/no)\n");
-            silence = scanf("%s", buf);
+            read_str(buf);
             if (strcmp(buf, "yes") == 0) break;
             else if (strcmp(buf, "no") == 0) {
                 end = 1;
