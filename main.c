@@ -218,8 +218,7 @@ void run_test() {
             if (strcmp(buf, "yes") == 0) {
                 print = 1;
                 break;
-            }
-            else if (strcmp(buf, "no") == 0) break;
+            } else if (strcmp(buf, "no") == 0) break;
         }
 
         silence = system("clear");
@@ -229,9 +228,10 @@ void run_test() {
         for (double i = a; i <= b; i += step_size) {
             got = approxArsinh_series(i, 20);
             expected = asinh(i);
-            if ((got - expected > epsilon)) sum++;
-            if (print) printf("asinh(%lf):\n\tGot: %lf\n\tExpected: %lf\n", i, got, expected);
-
+            if ((got - expected > epsilon)) {
+                sum++;
+                if (print) printf("asinh(%lf):\n\tGot: %lf\n\tExpected: %lf\n", i, got, expected);
+            }
         }
         printf("Done.\nTotal test failed: %d\n", sum);
 
