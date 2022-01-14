@@ -193,21 +193,21 @@ void print_help(char *message) {
 }
 void read_double(double *buf){
     if(scanf("%lf", buf) == EOF) {
-        printf(stderr, "Error while reading input!\n");
+        fprintf(stderr, "Error while reading input!\n");
         exit(EXIT_FAILURE);
     }
 }
 
 void read_int(int* buf){
     if(scanf("%d", buf) == EOF) {
-        printf(stderr, "Error while reading input!\n");
+        fprintf(stderr, "Error while reading input!\n");
         exit(EXIT_FAILURE);
     }
 }
 
 void read_str(char* buf){
     if(scanf("%s", buf) == EOF) {
-        printf(stderr, "Error while reading input!\n");
+        fprintf(stderr, "Error while reading input!\n");
         exit(EXIT_FAILURE);
     }
 }
