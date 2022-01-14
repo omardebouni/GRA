@@ -194,9 +194,10 @@ void print_help(char *message) {
 
 void run_test() {
     printf("Running Analysis on the accuracy of the approximation function ...\n");
-    double epsilon, a, b, step_size;
-    int end = 0, print = 0;
-    int precession;
+    double epsilon, a, b, step_size; //variables
+    int end = 0, print; //flags
+    int precession; // number of iterations
+    int total, failed;
     char buf[10];
     double got, expected;
     int silence; // silence warnings
@@ -218,22 +219,26 @@ void run_test() {
             if (strcmp(buf, "yes") == 0) {
                 print = 1;
                 break;
-            } else if (strcmp(buf, "no") == 0) break;
+            } else if (strcmp(buf, "no") == 0) {
+                print = 0;
+                break;
+            }
         }
 
         silence = system("clear");
         printf("Running test for values in [%lf, %lf]\nStep size: %lf\nAccuracy:%lf\n", a, b, step_size, epsilon);
 
-        int sum = 0;
+        failed = 0;
+        total = (b - a) * 1/step_size;
         for (double i = a; i <= b; i += step_size) {
             got = approxArsinh_series(i, 20);
             expected = asinh(i);
             if ((got - expected > epsilon)) {
-                sum++;
+                failed++;
                 if (print) printf("asinh(%lf):\n\tGot: %lf\n\tExpected: %lf\n", i, got, expected);
             }
         }
-        printf("Done.\nTotal test failed: %d\n", sum);
+        printf("Done.\nTotal test passed: %d/%d\n", (total-failed), total);
 
 
         while (1) {
@@ -247,7 +252,6 @@ void run_test() {
         }
     }
     printf("Analysis ended.\n");
-
     exit(0);
 }
 
