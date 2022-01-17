@@ -25,6 +25,8 @@ int main(int argc, char **argv) {
 
     /* This will handle all the user inputs/options and update the variables above */
     handle(argc, argv, &version, &x, &analysis, &repetitions);
+    
+    printf("%l %lf %d %l\n",version, x, analysis, repetitions);
 
     /* Used for Tracking Time in Functions*/
     struct timespec startTotal;
