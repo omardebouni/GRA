@@ -3,13 +3,15 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <getopt.h>
+
 
 /**
  * This function will take the user input given to the main method,
  * and will parse the arguments and options.
  * It will statically update/set the the values in the given variables
  */
-void handle(int argc, char **argv, long *version, double *x, bool *analysis, int *repetitions){
+void handle(int argc, char **argv, long *version, double *x, bool *analysis, long *repetitions){
     if (argc < 2) print_help("No input was given. Please use the following format!\n");
     /* Saves the read option */
     char option;
@@ -21,21 +23,21 @@ void handle(int argc, char **argv, long *version, double *x, bool *analysis, int
         switch (option) {
             case 'V':
                 if (v_flag++ > 0) print_help("The version can only be set once!\n"); //End program
-                version = strtol(optarg, &str_err, 10);
+                *version = strtol(optarg, &str_err, 10);
                 if (*str_err != '\0') print_help("The specified version couldn't be parsed!\n");
                 break;
             case 'B':
                 if (b_flag++ > 0) print_help("The -B option can only be set once!\n"); //End program
-                analysis = true;
+                *analysis = true;
                 if (optarg != NULL) {
-                    iterations = strtol(optarg, &str_err, 10);
+                    *iterations = strtol(optarg, &str_err, 10);
                     if (*str_err != '\0') print_help(NULL);
                 }
                 break;
             case 'p':
                 if (p_flag++ > 0)
                     print_help("The precession can only be specified once!\n");
-                precision = strtol(optarg, &str_err, 10);
+                *precision = strtol(optarg, &str_err, 10);
                 if (*str_err != '\0') print_help(NULL);
                 break;
             case 't':
@@ -51,7 +53,7 @@ void handle(int argc, char **argv, long *version, double *x, bool *analysis, int
         }
     }
     if (argc - optind == 1) {
-        x = strtof(argv[optind], &str_err);
+        *x = strtof(argv[optind], &str_err);
         if (*str_err != '\0')
             print_help("The given value couldn't be parsed. Please use the following format!\n");
     } else print_help(NULL);
