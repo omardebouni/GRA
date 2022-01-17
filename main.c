@@ -1,13 +1,8 @@
 #define _POSIX_C_SOURCE 199309L
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
-#include <string.h>
-#include <unistd.h>
 #include <time.h>
-//#include <iostream>
-#include <getopt.h>
 #include "custom_math.h"
 #include "utility.h"
 
