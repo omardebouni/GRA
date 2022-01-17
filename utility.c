@@ -11,11 +11,11 @@
  * and will parse the arguments and options.
  * It will statically update/set the the values in the given variables
  */
-void handle(int argc, char **argv, long *version, double *x, bool *analysis, long *repetitions){
+void handle(int argc, char **argv, long *version, double *x, bool *analysis, long *repetitions) {
     if (argc < 2) print_help("No input was given. Please use the following format!\n");
     /* Saves the read option */
     char option;
-    int v_flag = 0, b_flag = 0, p_flag = 0; // User can only specify each option once
+    int v_flag = 0, b_flag = 0; // User can only specify each option once
     int testing = 0;
     char *str_err;
 
@@ -86,22 +86,22 @@ void print_help(char *message) {
 }
 
 /* Helping methods to read input from user */
-void read_double(double *buf){
-    if(scanf("%lf", buf) == EOF) {
+void read_double(double *buf) {
+    if (scanf("%lf", buf) == EOF) {
         fprintf(stderr, "Error while reading input!\n");
         exit(EXIT_FAILURE);
     }
 }
 
-void read_int(int* buf){
-    if(scanf("%d", buf) == EOF) {
+void read_int(int *buf) {
+    if (scanf("%d", buf) == EOF) {
         fprintf(stderr, "Error while reading input!\n");
         exit(EXIT_FAILURE);
     }
 }
 
-void read_str(char* buf){
-    if(scanf("%s", buf) == EOF) {
+void read_str(char *buf) {
+    if (scanf("%s", buf) == EOF) {
         fprintf(stderr, "Error while reading input!\n");
         exit(EXIT_FAILURE);
     }
@@ -115,7 +115,6 @@ void run_test() {
     printf("Running Analysis on the accuracy of the approximation function ...\n");
     double epsilon, a, b, step_size; //variables
     int end = 0, print; //flags
-    int precision; // number of iterations
     int total, failed;
     char buf[10];
     double got, expected;
@@ -128,8 +127,6 @@ void run_test() {
         read_double(&b);
         printf("Enter step size: ");
         read_double(&step_size);
-        printf("Enter precision: ");
-        read_int(&precision);
 
         while (1) {
             printf("Print failed values? (yes/no)\n");
@@ -147,17 +144,16 @@ void run_test() {
         printf("Running test for values in [%lf, %lf]\nStep size: %lf\nAccuracy:%lf\n", a, b, step_size, epsilon);
 
         failed = 0;
-        total = (b - a) * 1/step_size;
+        total = (b - a) * 1 / step_size;
         for (double i = a; i <= b; i += step_size) {
-            got = approxArsinh_series(i, 20);
+            got = approxArsinh_series(i);
             expected = asinh(i);
             if ((got - expected >= epsilon)) {
                 failed++;
                 if (print) printf("asinh(%lf):\n\tGot:      %lf\n\tExpected: %lf\n", i, got, expected);
             }
         }
-        printf("Done.\nTotal tests passed: %d/%d\n", (total-failed), total);
-
+        printf("Done.\nTotal tests passed: %d/%d\n", (total - failed), total);
 
         while (1) {
             printf("Run again? (yes/no)\n");
