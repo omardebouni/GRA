@@ -3,12 +3,8 @@
 #include <stdbool.h>
 #include <math.h>
 #include <time.h>
-#include "custom_math.h"
 #include "utility.h"
 #include "inverse_sinh.h"
-
-
-#define ITERATIONS 25
 
 
 
@@ -16,56 +12,7 @@
 // TODO: Implementierung von lookup hinzufügen
 // TODO: Change Makefile to produce arsinh to match Input Help Comments
 
-/*Die Funktion implementiert die Formel für ein bestimmtes x mithilfe einer reinen
-Reihendarstellung und gibt das Ergebnis zurück
-https://proofwiki.org/wiki/Power_Series_Expansion_for_Real_Area_Hyperbolic_Sine */
-double approxArsinh_series(double x) {
-    double absX = customAbs(x);
-    double result = 0;
-    double dividend, divisor;
-    if (absX <= 1) {
-        for (int n = 0; n < ITERATIONS; n++) {
-            dividend = sign(n) * customFactorial(2 * n) * customPow(x, 2 * n + 1);
-            divisor = customPow(2, 2 * n) * customPow(customFactorial(n), 2) * (2 * n + 1);
-            result += (dividend / divisor);
-        }
-    } else if (x >= 1) {
-        for (int n = 1; n < ITERATIONS; n++) {
-            dividend = sign(n) * customFactorial(2 * n);
-            divisor = customPow(2, 2 * n) * customPow(customFactorial(n), 2) * (2 * n) * customPow(x, 2 * n);
-            result += (dividend / divisor);
-        }
-        result = customLn(2 * x) - result;
-    } else if (x <= -1) {
-        for (int n = 0; n < ITERATIONS; n++) {
-            dividend = customPow(-1, n) * customFactorial(2 * n);
-            divisor = customPow(2, 2 * n) * customPow(customFactorial(n), 2) * (2 * n) * customPow(x, 2 * n);
-            if (divisor != 0) {
-                result += (dividend / divisor);
-            }
-        }
-        result = -customLn(-2 * x) + result;
-    }
-    return result;
-}
 
-/*Die Funktion implementiert die Formel für ein bestimmtes x mithilfe eines Tabellen-
-Lookups.*/
-double approxArsinh_lookup(double x) {
-    x += customSqrt(customPow(x, 2) + 1); // x + sqrt(x^2 + 1)
-    return lookup_ln(x); // ln(x + sqrt(x^2 + 1))
-}
-
-/*
-Create Lookuptable with Posix Function not optimized
-*/
-long double table[256];
-
-void createPosixCompare(){
-    for(int i = 0; i < 256; i++){
-        table[i] = asinhl(2.0*3.1415927*(float)i/256.0);
-    }
-}
 
 int main(int argc, char **argv) {
     /* The chosen version */
