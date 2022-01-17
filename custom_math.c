@@ -48,3 +48,8 @@ double customLn(double x){
 double customSqrt(double x){
     return 0;
 }
+
+// TODO: implement ln using a lookup table
+double lookup_ln(double x){
+    return 0;
+}
