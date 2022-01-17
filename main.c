@@ -5,6 +5,8 @@
 #include <time.h>
 #include "custom_math.h"
 #include "utility.h"
+#include "inverse_sinh.h"
+
 
 #define ITERATIONS 25
 
