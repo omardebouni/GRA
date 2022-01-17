@@ -44,14 +44,7 @@ double customLn(double x){
     return 2 * y * res;
 }
 
-double lookupValuesFormula(int n) {
-    return (customPow(-1,n) * customFactorial(2*n)) / (customPow(2, 2*n) * customPow(customFactorial(n), 2));
+// TODO: implement square root
+double customSqrt(double x){
+    return NULL;
 }
-
-void initializeLookupArray(double lookup_values[], int precision) {
-    for (int i = 0; i < precision; i++)
-    {
-        lookup_values[i] = lookupValuesFormula(i);
-    }
-}
-
