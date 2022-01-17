@@ -1,5 +1,5 @@
 #include "utility.h"
-#include "inverse_sinh"
+#include "inverse_sinh.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
