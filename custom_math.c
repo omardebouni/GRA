@@ -46,5 +46,5 @@ double customLn(double x){
 
 // TODO: implement square root
 double customSqrt(double x){
-    return NULL;
+    return 0;
 }
