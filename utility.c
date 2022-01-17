@@ -19,7 +19,7 @@ void handle(int argc, char **argv, long *version, double *x, bool *analysis, lon
     int testing = 0;
     char *str_err;
 
-    while ((option = getopt(argc, argv, ":p:V:B::ht")) != -1 && !testing) {
+    while ((option = getopt(argc, argv, ":V:B::ht")) != -1 && !testing) {
         switch (option) {
             case 'V':
                 if (v_flag++ > 0) print_help("The version can only be set once!\n"); //End program
@@ -30,15 +30,9 @@ void handle(int argc, char **argv, long *version, double *x, bool *analysis, lon
                 if (b_flag++ > 0) print_help("The -B option can only be set once!\n"); //End program
                 *analysis = true;
                 if (optarg != NULL) {
-                    *iterations = strtol(optarg, &str_err, 10);
+                    *repetitions = strtol(optarg, &str_err, 10);
                     if (*str_err != '\0') print_help(NULL);
                 }
-                break;
-            case 'p':
-                if (p_flag++ > 0)
-                    print_help("The precession can only be specified once!\n");
-                *precision = strtol(optarg, &str_err, 10);
-                if (*str_err != '\0') print_help(NULL);
                 break;
             case 't':
                 testing++;
