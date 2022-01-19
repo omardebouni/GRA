@@ -51,6 +51,7 @@ double customLn(double x){
 
 /* Babylonian method: https://www.geeksforgeeks.org/square-root-of-a-perfect-square/ */
 double customSqrt(double n){
+    return sqrt(n);
     double x = n;
     double y = 1;
     double e = 0.000001; // precision level
