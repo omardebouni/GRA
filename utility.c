@@ -7,7 +7,9 @@
 #include <stdbool.h>
 #include <string.h>
 #include <getopt.h>
-#include <math.h>
+#include <math.h
+#define _POSIX_C_SOURCE 199309L
+
 
 
 /**
