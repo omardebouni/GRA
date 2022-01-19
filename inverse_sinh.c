@@ -1,5 +1,5 @@
 #include "custom_math.h"
-#include "math.h"
+#include <math.h>
 
 #define ITERATIONS 25
 
