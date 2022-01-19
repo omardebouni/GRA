@@ -1,8 +1,6 @@
 #include "custom_math.h"
 #include "math.h"
 
-double ln_table[1000];
-
 #define ITERATIONS 25
 
 
@@ -46,7 +44,7 @@ double approxArsinh_series(double x) {
  * Returns the index of the sought logarithm as an int
  */
 int index_of(double x) {
-    return to_int((x - 1) * 100);
+    return (int) customFloor((x - 1) * 100);
 }
 
 /**
@@ -56,14 +54,17 @@ int index_of(double x) {
  * with a step size of 0.01
  */
 double get_closest_entry(double x) {
-
+    x *= 100;
+    double floored = customFloor(x);
+    if ((x - floored) < 0.5) return floored / 100;
+    else return (floored + 1) / 100;
 }
 
 // TODO: implement ln using a lookup table
-double lookup_ln(double x){
+double lookup_ln(double x) {
     if (x == 0) return -INFINITY;
-    if (x < 1) return -1 + lookup_ln(x*M_E);
-    else if (x > 10) return 1 + lookup_ln(x/M_E);
+    if (x < 1) return -1 + lookup_ln(x * M_E);
+    else if (x > 10) return 1 + lookup_ln(x / M_E);
 
     double closest_entry = get_closest_entry(x);
     return ln_table[index_of(closest_entry)] + lookup_ln(1 + customAbs(x - closest_entry));
