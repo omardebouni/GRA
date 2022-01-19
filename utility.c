@@ -1,6 +1,7 @@
 #include "utility.h"
 #include "inverse_sinh.h"
 #include "custom_math.h"
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -122,7 +123,7 @@ void run_test() {
     char buf[10];
     double got, expected;
     while (!end) {
-        printf("Enter 1 for the series_expansion function, 2 for the lookup one:");
+        printf("Enter 1 for the series_expansion function, 2 for the lookup one: ");
         read_int(&version);
         printf("Enter the desired accuracy to compare with: ");
         read_double(&epsilon);
@@ -150,6 +151,12 @@ void run_test() {
 
         failed = 0;
         total = (b - a) * 1 / step_size;
+
+        struct timespec start;
+        struct timespec end;
+        double time;
+
+        clock_gettime(CLOCK_MONOTONIC, &start); //Starting time clocking
         if (version == 1) {
             for (double i = a; i <= b; i += step_size) {
                 got = approxArsinh_series(i);
@@ -171,7 +178,10 @@ void run_test() {
             }
         }
 
+        clock_gettime(CLOCK_MONOTONIC, &end); //Stop time clocking
+        time = end.tv_sec - start.tv_sec + 1e-9 * (end.tv_nsec - start.tv_nsec);
         printf("Done.\nTotal tests passed: %d/%d\n", (total - failed), total);
+        printf("Total time to run all tests:  %f\n", time);
 
         while (1) {
             printf("Run again? (yes/no)\n");
