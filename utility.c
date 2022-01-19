@@ -152,11 +152,11 @@ void run_test() {
         failed = 0;
         total = (b - a) * 1 / step_size;
 
-        struct timespec start;
-        struct timespec end;
+        struct timespec startTime;
+        struct timespec endTime;
         double time;
 
-        clock_gettime(CLOCK_MONOTONIC, &start); //Starting time clocking
+        clock_gettime(CLOCK_MONOTONIC, &startTime); //Starting time clocking
         if (version == 1) {
             for (double i = a; i <= b; i += step_size) {
                 got = approxArsinh_series(i);
@@ -178,8 +178,8 @@ void run_test() {
             }
         }
 
-        clock_gettime(CLOCK_MONOTONIC, &end); //Stop time clocking
-        time = end.tv_sec - start.tv_sec + 1e-9 * (end.tv_nsec - start.tv_nsec);
+        clock_gettime(CLOCK_MONOTONIC, &endTime); //Stop time clocking
+        time = endTime.tv_sec - startTime.tv_sec + 1e-9 * (endTime.tv_nsec - startTime.tv_nsec);
         printf("Done.\nTotal tests passed: %d/%d\n", (total - failed), total);
         printf("Total time to run all tests:  %f\n", time);
 
