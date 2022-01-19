@@ -8,7 +8,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <getopt.h>
-#include <math.h
+#include <math.h>
 
 
 
