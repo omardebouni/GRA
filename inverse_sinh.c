@@ -70,7 +70,7 @@ double lookup_ln(double x) {
     else if (x > 10) return 1 + lookup_ln(x / M_E);
     
     //recursion base
-    if (x == 1) return 0;
+    if (x <= 1.000001) return 0;
         
 
     double closest_entry = get_closest_entry(x);
