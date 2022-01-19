@@ -117,11 +117,13 @@ void read_str(char *buf) {
 void run_test() {
     printf("Running Analysis on the accuracy of the approximation function ...\n");
     double epsilon, a, b, step_size; //variables
-    int end = 0, print; //flags
+    int end = 0, print, version; //flags
     int total, failed;
     char buf[10];
     double got, expected;
     while (!end) {
+        printf("Enter 1 for the series_expansion function, 2 for the lookup one:");
+        read_int(&version);
         printf("Enter the desired accuracy to compare with: ");
         read_double(&epsilon);
         printf("Enter the desired interval boundaries to be tested in starting with the left_bound: ");
@@ -148,14 +150,27 @@ void run_test() {
 
         failed = 0;
         total = (b - a) * 1 / step_size;
-        for (double i = a; i <= b; i += step_size) {
-            got = approxArsinh_series(i);
-            expected = asinh(i);
-            if (customAbs(got - expected) >= epsilon) {
-                failed++;
-                if (print) printf("asinh(%lf):\n\tGot:      %lf\n\tExpected: %lf\n", i, got, expected);
+        if (version == 1) {
+            for (double i = a; i <= b; i += step_size) {
+                got = approxArsinh_series(i);
+                expected = asinh(i);
+                if (customAbs(got - expected) >= epsilon) {
+                    failed++;
+                    if (print) printf("asinh(%lf):\n\tGot:      %lf\n\tExpected: %lf\n", i, got, expected);
+                }
             }
         }
+        else {
+            for (double i = a; i <= b; i += step_size) {
+                got = approxArsinh_lookup(i);
+                expected = asinh(i);
+                if (customAbs(got - expected) >= epsilon) {
+                    failed++;
+                    if (print) printf("asinh(%lf):\n\tGot:      %lf\n\tExpected: %lf\n", i, got, expected);
+                }
+            }
+        }
+
         printf("Done.\nTotal tests passed: %d/%d\n", (total - failed), total);
 
         while (1) {
