@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
             printf("Custom Arsinh has finished, time taken: %f\n", time);
             break;
         case 1:
-            printf("Version %d\n", version);
+            printf("Version %ld\n", version);
             clock_gettime(CLOCK_MONOTONIC, &start); //Starting time clocking
             result = approxArsinh_lookup(x);
             clock_gettime(CLOCK_MONOTONIC, &end); //Starting time clocking
