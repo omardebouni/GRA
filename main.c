@@ -11,6 +11,8 @@
 // TODO: Zeit Tracking
 // TODO: Implementierung von lookup hinzufügen
 // TODO: Change Makefile to produce arsinh to match Input Help Comments
+// TODO: Implement customSqrt()
+// TODO: Accept negative input values
 
 
 
@@ -25,8 +27,6 @@ int main(int argc, char **argv) {
 
     /* This will handle all the user inputs/options and update the variables above */
     handle(argc, argv, &version, &x, &analysis, &repetitions);
-    
-    printf("version is %ld, x is %lf, anal %d, rep is %ld\n",version, x, analysis, repetitions);
 
     /* Used for Tracking Time in Functions*/
     struct timespec startTotal;
@@ -42,27 +42,27 @@ int main(int argc, char **argv) {
     // the chosen version of implementation will be called
     switch (version) {
         case 0:
+            printf("Running approxArsinh_series on %lf\n", x);
             clock_gettime(CLOCK_MONOTONIC, &start); //Starting time clocking
             result = approxArsinh_series(x);
             clock_gettime(CLOCK_MONOTONIC, &end); //Starting time clocking
             time = end.tv_sec - start.tv_sec + 1e-9 * (end.tv_nsec - start.tv_nsec);
-            printf("Custom Arsinh has finished, time taken: %f\n", time);
+            printf("Custom Arsinh has finished, time taken: %lf\n", time);
             break;
         case 1:
-            printf("Version %ld\n", version);
+            printf("Running approxArsinh_lookup on %lf\n", x);
             clock_gettime(CLOCK_MONOTONIC, &start); //Starting time clocking
             result = approxArsinh_lookup(x);
             clock_gettime(CLOCK_MONOTONIC, &end); //Starting time clocking
             time = end.tv_sec - start.tv_sec + 1e-9 * (end.tv_nsec - start.tv_nsec);
-            printf("Arsinh_Lookup finished, time taken: %f\n", time);
-
+            printf("Arsinh_Lookup finished, time taken: %lf\n", time);
             break;
         case 2:
             clock_gettime(CLOCK_MONOTONIC, &start); //Starting time clocking
             result = asinh(x);
             clock_gettime(CLOCK_MONOTONIC, &end); //Starting time clocking
             time = end.tv_sec - start.tv_sec + 1e-9 * (end.tv_nsec - start.tv_nsec);
-            printf("Arsinh_Lookup finished, time taken: %f\n", time);
+            printf("Arsinh_Lookup finished, time taken: %lf\n", time);
             break;
             //case ..
             //     ..
@@ -73,10 +73,10 @@ int main(int argc, char **argv) {
 
     clock_gettime(CLOCK_MONOTONIC, &endTotal); //Stop time clocking
     timeTotal = endTotal.tv_sec - startTotal.tv_sec + 1e-9 * (endTotal.tv_nsec - startTotal.tv_nsec);
-    printf("Programm has finished, total time taken:  %f\n", timeTotal);
+    printf("Program has finished, total time taken:  %f\n", timeTotal);
 
     printf("Value of result = %lf\n", result);
-    printf("Result according to posix: %lf\n", asinh(x));
+    printf("Value of result according to the posix function: %lf\n", asinh(x));
     printf("finished\n");
     return 0;
 }

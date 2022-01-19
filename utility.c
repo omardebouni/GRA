@@ -1,5 +1,6 @@
 #include "utility.h"
 #include "inverse_sinh.h"
+#include "custom_math.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -150,7 +151,7 @@ void run_test() {
         for (double i = a; i <= b; i += step_size) {
             got = approxArsinh_series(i);
             expected = asinh(i);
-            if ((got - expected >= epsilon)) {
+            if (customAbs(got - expected) >= epsilon) {
                 failed++;
                 if (print) printf("asinh(%lf):\n\tGot:      %lf\n\tExpected: %lf\n", i, got, expected);
             }
@@ -169,4 +170,15 @@ void run_test() {
     }
     printf("Analysis ended.\n");
     exit(0);
+}
+
+/*
+Create Lookuptable with Posix Function not optimized
+*/
+long double table[256];
+
+void createPosixCompare(){
+    for(int i = 0; i < 256; i++){
+        table[i] = asinhl(2.0*3.1415927*(float)i/256.0);
+    }
 }

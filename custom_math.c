@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "custom_math.h"
 
 #include <math.h> // Only to get -INFINITY without generating errors!
 
@@ -48,6 +49,18 @@ double customLn(double x){
     return 2 * y * res;
 }
 
+/* Babylonian method: https://www.geeksforgeeks.org/square-root-of-a-perfect-square/ */
+double customSqrt(double n){
+    double x = n;
+    double y = 1;
+    double e = 0.000001; // precision level
+    while(x - y > e) {
+        (x + y) / 2;
+        y = n / x;
+    }
+    return x;
+}
+
 double customFloor(double x) {
     if (x == (long int) x || x == INFINITY || x == -INFINITY) return x;
     return (x > 0) ? (long int) x : (long int) (x-1);
@@ -56,9 +69,4 @@ double customFloor(double x) {
 double customCeil(double x) {
     if (x == (long int) x || x == INFINITY || x == -INFINITY) return x;
     return (long int) (x+1);
-}
-
-// TODO: implement square root
-double customSqrt(double x){
-    return sqrt(x);
 }
