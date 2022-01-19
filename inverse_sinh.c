@@ -74,7 +74,7 @@ double lookup_ln(double x) {
         
 
     double closest_entry = get_closest_entry(x);
-    return ln_table[index_of(closest_entry)] + lookup_ln(1 + customAbs(x - closest_entry));
+    return ln_table[index_of(closest_entry)] + lookup_ln(1 + customAbs(x - closest_entry)/closest_entry);
 }
 
 /*Die Funktion implementiert die Formel für ein bestimmtes x mithilfe eines Tabellen-
