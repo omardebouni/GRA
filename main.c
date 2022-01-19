@@ -49,6 +49,7 @@ int main(int argc, char **argv) {
             printf("Custom Arsinh has finished, time taken: %f\n", time);
             break;
         case 1:
+            printf("Version %d\n", version);
             clock_gettime(CLOCK_MONOTONIC, &start); //Starting time clocking
             result = approxArsinh_lookup(x);
             clock_gettime(CLOCK_MONOTONIC, &end); //Starting time clocking
@@ -74,7 +75,8 @@ int main(int argc, char **argv) {
     timeTotal = endTotal.tv_sec - startTotal.tv_sec + 1e-9 * (endTotal.tv_nsec - startTotal.tv_nsec);
     printf("Programm has finished, total time taken:  %f\n", timeTotal);
 
-    printf("Value of result = %f\n", result);
+    printf("Value of result = %lf\n", result);
+    printf("Result according to posix: %lf\n", asinh(x));
     printf("finished\n");
     return 0;
 }
