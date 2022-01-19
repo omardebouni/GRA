@@ -1,4 +1,5 @@
 #include "custom_math.h"
+#include "inverse_sinh.h"
 #include <math.h>
 
 #define ITERATIONS 25
