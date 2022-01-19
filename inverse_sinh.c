@@ -68,6 +68,10 @@ double lookup_ln(double x) {
     if (x == 0) return -INFINITY;
     if (x < 1) return -1 + lookup_ln(x * M_E);
     else if (x > 10) return 1 + lookup_ln(x / M_E);
+    
+    //recursion base
+    if (x == 1) return 0;
+        
 
     double closest_entry = get_closest_entry(x);
     return ln_table[index_of(closest_entry)] + lookup_ln(1 + customAbs(x - closest_entry));
