@@ -183,7 +183,7 @@ void run_test() {
         clock_gettime(CLOCK_MONOTONIC, &endTime); //Stop time clocking
         time = endTime.tv_sec - startTime.tv_sec + 1e-9 * (endTime.tv_nsec - startTime.tv_nsec);
         printf("Done.\nTotal tests passed: %d/%d\n", (total - failed), total);
-        printf("Total time to run all tests:  %f\n", time);
+        printf("Total time to run all tests:  %f seconds\n", time);
 
         while (1) {
             printf("Run again? (yes/no)\n");
