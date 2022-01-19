@@ -148,7 +148,7 @@ void run_test() {
         failed = 0;
         total = (b - a) * 1 / step_size;
         for (double i = a; i <= b; i += step_size) {
-            got = approxArsinh_series(i);
+            got = approxArsinh_lookup(i);
             expected = asinh(i);
             if ((got - expected >= epsilon)) {
                 failed++;
