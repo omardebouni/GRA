@@ -1,5 +1,5 @@
     .intel_syntax noprefix
-    .global regulafalsi
+    .global factorial
 
     .text
 
