@@ -83,8 +83,9 @@ void handle(int argc, char **argv, long *version, double *x, bool *analysis, lon
                 if (b_flag++ > 0) print_help("The -B option can only be set once!\n"); //End program
                 *analysis = true;
                 if (optarg != NULL) {
+                    printf("I AM HEEEEEEEEEREEE ...........\n");
                     *repetitions = strtol(optarg, &str_err, 10);
-                    printf("%d repeti\n");
+                    printf(" rep is %d repeti\n", *repetitions);
                     if (*str_err != '\0') print_help(NULL);
                 }
                 break;
