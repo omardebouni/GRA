@@ -32,6 +32,7 @@ double customAbs(double x) {
     return (x > 0) ? x : -x;
 }
 
+/* Auxiliary function, returns 1 if n is even, -1 otherwise */
 int sign(int n) {
     return (n % 2 == 0) ? 1 : -1;
 }

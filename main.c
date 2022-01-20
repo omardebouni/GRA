@@ -1,3 +1,4 @@
+#define _POSIX_C_SOURCE 199309L
 #include <stdio.h>
 #include <stdbool.h>
 #include <math.h>
@@ -5,7 +6,7 @@
 #include "inverse_sinh.h"
 
 
-// TODO: Accept negative input values?
+// TODO: Accept negative values?
 
 /**
  * The main method will just start the program and call
@@ -37,6 +38,8 @@ int main(int argc, char **argv) {
         case 1:
             fn = &approxArsinh_lookup;break;
         case 2:
+            fn = &approxArsinh_series_V1;break;
+        case 3:
             fn = &asinh;break;
         default:
             print_help("The chosen version is not available!\n");

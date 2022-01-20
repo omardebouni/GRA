@@ -98,3 +98,16 @@ double approxArsinh_lookup(double x) {
     x += customSqrt(customPow(x, 2) + 1); // x + sqrt(x^2 + 1)
     return lookup_ln(x); // ln(x + sqrt(x^2 + 1))
 }
+
+
+
+double approxArsinh_series_V1(double x) {
+    double result = customLn(2*x);
+
+    for (int n = 1; n < 10; n++) {
+        result +=
+                sign(n - 1) * customFactorial(customFactorial(2*n-1)) /
+                ((2*n) * customFactorial(2*n) * customPow(x, 2*n));
+    }
+    return result;
+}
