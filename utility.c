@@ -12,7 +12,6 @@
 #include <math.h>
 
 
-
 /**
  * This function will run the version of the implementation
  * chosen by the user from the main method
@@ -172,7 +171,7 @@ void run_test() {
         printf("Choose the implementation you would like to test:\n\t");
         printf("1: The default version of the series_expansion implementation\n\t");
         printf("2: The lookup implementation\n\t");
-        printf("3: The second version of the series_expansion implementation\nEnter number:");
+        printf("3: The second version of the series_expansion implementation\nEnter number: ");
         read_int(&version);
         printf("Enter the desired accuracy to compare with: ");
         read_double(&epsilon);

@@ -1,0 +1,6 @@
+
+
+#ifndef IMPLEMENTIERUNG_FACTORIAL_H
+#define IMPLEMENTIERUNG_FACTORIAL_H
+long long int factorial(long n);
+#endif //IMPLEMENTIERUNG_FACTORIAL_H

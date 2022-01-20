@@ -5,6 +5,8 @@
 #define M_E         2.71828182845904523536028747135266250
 #define ITERATIONS 25
 
+#include "factorial.h"
+
 
 
 /*Die Funktion implementiert die Formel für ein bestimmtes x mithilfe einer reinen
@@ -104,10 +106,10 @@ double approxArsinh_lookup(double x) {
 double approxArsinh_series_V1(double x) {
     double result = customLn(2*x);
 
-    for (int n = 1; n < 3; n++) {
+    for (int n = 1; n < 4; n++) {
         result +=
-                sign(n - 1) * customFactorial(customFactorial(2*n-1)) /
-                ((2*n) * customFactorial(2*n) * customPow(x, 2*n));
+                sign(n - 1) * factorial(factorial(2*n-1)) /
+                ((2*n) * factorial(2*n) * customPow(x, 2*n));
     }
     return result;
 }
