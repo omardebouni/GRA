@@ -106,7 +106,7 @@ double approxArsinh_lookup(double x) {
 double approxArsinh_series_V1(double x) {
     double result = 0;
     for (int n = 0; n < 100; n++){
-        result += ((sign(n) * factorial(factorial(2*n-1))) / ((2*n+1) * factorial(factorial(2*n)))) * (customPow(x,2*n+1));
+        result += ((sign(n) * customFactorial(customFactorial(2*n-1))) / ((2*n+1) * customFactorial(customFactorial(2*n)))) * (customPow(x,2*n+1));
     }
     return result;
 }
