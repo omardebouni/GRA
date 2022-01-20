@@ -65,7 +65,7 @@ void handle(int argc, char **argv, long *version, double *x, bool *analysis, lon
     int testing = 0;
     char *str_err;
 
-    while ((option = getopt(argc, argv, ":V:B::ht")) != -1 && !testing) {
+    while ((option = getopt(argc, argv, ":V:htB::")) != -1 && !testing) {
         switch (option) {
             case 'V':
                 if (v_flag++ > 0) print_help("The version can only be set once!\n"); //End program
