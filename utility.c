@@ -59,13 +59,19 @@ void runtime_analysis(double (*fn)(double), double x, int repetitions) {
  */
 void handle(int argc, char **argv, long *version, double *x, bool *analysis, long *repetitions) {
     if (argc < 2) print_help("No input was given. Please use the following format!\n");
+
+    char *str_err;
+    *x = strtof(argv[1], &str_err);
+    if (*str_err != '\0')
+        print_help("The given value couldn't be parsed. Please use the following format!\n");
+
     /* Saves the read option */
     char option;
     int v_flag = 0, b_flag = 0; // User can only specify each option once
     int testing = 0;
-    char *str_err;
 
-    while ((option = getopt(argc, argv, ":V:htB:")) != -1 && !testing) {
+
+    while ((option = getopt(argc, argv, ":V:B::ht")) != -1 && !testing) {
         switch (option) {
             case 'V':
                 if (v_flag++ > 0) print_help("The version can only be set once!\n"); //End program
@@ -92,11 +98,11 @@ void handle(int argc, char **argv, long *version, double *x, bool *analysis, lon
                 print_help(NULL);
         }
     }
-    if (argc - optind == 1) {
-        *x = strtof(argv[optind], &str_err);
-        if (*str_err != '\0')
-            print_help("The given value couldn't be parsed. Please use the following format!\n");
-    } else print_help(NULL);
+//    if (argc - optind == 1) {
+//        *x = strtof(argv[optind], &str_err);
+//        if (*str_err != '\0')
+//            print_help("The given value couldn't be parsed. Please use the following format!\n");
+//    } else print_help(NULL);
 }
 
 /**
