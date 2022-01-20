@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
 
     /* This function will be run if the -B option was given
      * Defined in utility.c */
-    if (analysis) runtime_analysis(fn, repetitions, x);
+    if (analysis) runtime_analysis(fn, x, repetitions);
     else run(fn, x); // else the chosen implementation will just be called
 
     return 0;
