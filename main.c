@@ -15,7 +15,6 @@
  * The implementations of the are in the inverse_sinh.c file
  * Other functions can be found in utility.c
  */
-
 int main(int argc, char **argv) {
     /* The chosen version */
     long version = 0; // default

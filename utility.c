@@ -12,19 +12,6 @@
 #include <math.h>
 
 
-#define _POSIX_C_SOURCE 199309L
-
-#include "utility.h"
-#include "inverse_sinh.h"
-#include "custom_math.h"
-#include <time.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <getopt.h>
-#include <math.h>
-
 
 /**
  * This function will run the version of the implementation
