@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 199309L
+
 #include "utility.h"
 #include "inverse_sinh.h"
 #include "custom_math.h"
@@ -11,6 +12,45 @@
 #include <math.h>
 
 
+/**
+ * This function will run the version of the implementation
+ * chosen by the user from the main method
+ */
+void run(double (*fn)(double), double x) {
+    double result = (*fn)(x); // call the given function on the given x value
+    printf("Arsinh(%lf) = %lf\n", x, result);
+}
+
+/**
+ * This function runs the chosen implementation while also measuring
+ * the time it took to run the implementation, and the total time to run
+ * the implementation for the number of times specified in the repetitions parameter.
+ */
+void runtime_analysis(double (*fn)(double), double x, int repetitions) {
+    printf("Running a runtime analysis...\n");
+    struct timespec startTotal;
+    struct timespec endTotal;
+    struct timespec start;
+    struct timespec end;
+    double time;
+    double timeTotal;
+
+    double result = 0;
+    clock_gettime(CLOCK_MONOTONIC, &startTotal); //Starting time clocking
+
+    for (int i = 1; i <= repetitions; i++){
+        clock_gettime(CLOCK_MONOTONIC, &start); //Starting time clocking
+        result = approxArsinh_series(x);
+        clock_gettime(CLOCK_MONOTONIC, &end); //Starting time clocking
+        time = end.tv_sec - start.tv_sec + 1e-9 * (end.tv_nsec - start.tv_nsec);
+        printf("Iteration %d: Arsinh finished calculating in %lf seconds.\n", i, time);
+    }
+    clock_gettime(CLOCK_MONOTONIC, &endTotal); //Stop time clocking
+    timeTotal = endTotal.tv_sec - startTotal.tv_sec + 1e-9 * (endTotal.tv_nsec - startTotal.tv_nsec);
+
+    printf("Result: %lf\n", result);
+    printf("Total time to run %d %s: %lf\n", repetitions, (repetitions>1) ? "iterations": "iteration", timeTotal);
+}
 
 /**
  * This function will take the user input given to the main method,
@@ -49,7 +89,8 @@ void handle(int argc, char **argv, long *version, double *x, bool *analysis, lon
                 print_help(NULL);
                 break;
             default:
-                print_help(NULL);
+                if ()
+                    print_help(NULL);
         }
     }
     if (argc - optind == 1) {
@@ -66,7 +107,7 @@ void handle(int argc, char **argv, long *version, double *x, bool *analysis, lon
 void print_help(char *message) {
     if (message != NULL) fprintf(stderr, "%s", message);
     char *help_msg = "Default: \n\t"
-                     "Usage: ./arsinh <float>\n\n"
+                     "Usage: ./main <float>\n\n"
                      "Options:\n\t"
                      "-V<int>\t-- The implementation that should be used.\n\t"
                      "       \t   Possible inputs: V0-V3\n\t"
@@ -75,23 +116,25 @@ void print_help(char *message) {
                      "-B<int>\t-- When set, a runtime analysis will be executed\n\t"
                      "       \t   and the measured time will be outputted. The argument of\n\t"
                      "       \t   this option is optional. It specifies the number of repetitions\n\n\t"
-                     "-p<int>\t   This specifies the precision. A higher precision\n\t"
-                     "       \t   leads to a longer runtime, and a more accurate result\n\n\t"
+                     "-t     \t   When used, a testing program will run. The program will ask\n\t"
+                     "       \t   user to enter some variables and series of tests will be run\n\t"
+                     "       \t   in a given interval with given step size. Finally test result\n\t"
+                     "       \t   as well as total time to run wil be outputted\n\n\t"
                      "-h     \t-- Prints the help message that describes all the options\n\t"
                      "--help \t   of the program, and gives examples on how to use it.\n\n\t"
-                     "Usage: ./arsinh <float> -V<int> -B<int> -p<int>\n\t\t    "
-                     "./arsinh -h\n\n"
+                     "Usage: ./main <float> -V<int> -B<int> \n\t\t    "
+                     "./main -h\n\n"
                      "Examples:\n\t"
-                     "./arsinh 2.0\n\t"
-                     "./arsinh 2.0 -p20\n\t"
-                     "./arsinh 1.5 -V0\n\t"
-                     "./arsinh -V2 3.14159 -B -p10\n\t"
-                     "./arsinh 5 -B2\n";
+                     "./main 2.0\n\t"
+                     "./main -t\n\t"
+                     "./main 1.5 -V0\n\t"
+                     "./main -V2 3.14159 -B\n\t"
+                     "./main 5 -B2\n";
     fprintf(stderr, "%s", help_msg);
     exit(1);
 }
 
-/* Helping methods to read input from user */
+/* Auxiliary methods to read input from user */
 void read_double(double *buf) {
     if (scanf("%lf", buf) == EOF) {
         fprintf(stderr, "Error while reading input!\n");
@@ -118,6 +161,7 @@ void read_str(char *buf) {
  * compared to the posix method asinh()
  */
 void run_test() {
+    if (system("clear") == -1)exit(-1); // just to silence warning
     printf("Running Analysis on the accuracy of the approximation function ...\n");
     double epsilon, a, b, step_size; //variables
     int end = 0, print, version; //flags
@@ -168,8 +212,7 @@ void run_test() {
                     if (print) printf("asinh(%lf):\n\tGot:      %lf\n\tExpected: %lf\n", i, got, expected);
                 }
             }
-        }
-        else {
+        } else {
             for (double i = a; i <= b; i += step_size) {
                 got = approxArsinh_lookup(i);
                 expected = asinh(i);
@@ -204,8 +247,8 @@ Create Lookuptable with Posix Function not optimized
 */
 long double table[256];
 
-void createPosixCompare(){
-    for(int i = 0; i < 256; i++){
-        table[i] = asinhl(2.0*3.1415927*(float)i/256.0);
+void createPosixCompare() {
+    for (int i = 0; i < 256; i++) {
+        table[i] = asinhl(2.0 * 3.1415927 * (float) i / 256.0);
     }
 }

@@ -1,20 +1,19 @@
-#define _POSIX_C_SOURCE 199309L
 #include <stdio.h>
 #include <stdbool.h>
 #include <math.h>
-#include <time.h>
 #include "utility.h"
 #include "inverse_sinh.h"
 
 
+// TODO: Accept negative input values?
 
-// TODO: Zeit Tracking
-// TODO: Implementierung von lookup hinzufügen
-// TODO: Change Makefile to produce arsinh to match Input Help Comments
-// TODO: Implement customSqrt()
-// TODO: Accept negative input values
-
-
+/**
+ * The main method will just start the program and call
+ * the appropriate functions according to the given user
+ * input from the command line.
+ * The implementations of the are in the inverse_sinh.c file
+ * Other functions can be found in utility.c
+ */
 
 int main(int argc, char **argv) {
     /* The chosen version */
@@ -25,58 +24,28 @@ int main(int argc, char **argv) {
     bool analysis = false;
     long repetitions = 1; //default
 
-    /* This will handle all the user inputs/options and update the variables above */
+    /* This will handle all the user inputs/options and update the variables above
+     * Defined in utility.c */
     handle(argc, argv, &version, &x, &analysis, &repetitions);
 
-    /* Used for Tracking Time in Functions*/
-    struct timespec startTotal;
-    struct timespec endTotal;
-    struct timespec start;
-    struct timespec end;
-    double time;
-    double timeTotal;
+    /* A pointer to the implementation to be run according to the user */
+    double (*fn)(double);
 
-
-    double result = 0;
-    clock_gettime(CLOCK_MONOTONIC, &startTotal); //Starting time clocking
-    // the chosen version of implementation will be called
     switch (version) {
         case 0:
-            printf("Running approxArsinh_series on %lf\n", x);
-            clock_gettime(CLOCK_MONOTONIC, &start); //Starting time clocking
-            result = approxArsinh_series(x);
-            clock_gettime(CLOCK_MONOTONIC, &end); //Starting time clocking
-            time = end.tv_sec - start.tv_sec + 1e-9 * (end.tv_nsec - start.tv_nsec);
-            printf("Custom Arsinh has finished, time taken: %lf\n", time);
-            break;
+            fn = &approxArsinh_series;break;
         case 1:
-            printf("Running approxArsinh_lookup on %lf\n", x);
-            clock_gettime(CLOCK_MONOTONIC, &start); //Starting time clocking
-            result = approxArsinh_lookup(x);
-            clock_gettime(CLOCK_MONOTONIC, &end); //Starting time clocking
-            time = end.tv_sec - start.tv_sec + 1e-9 * (end.tv_nsec - start.tv_nsec);
-            printf("Arsinh_Lookup finished, time taken: %lf\n", time);
-            break;
+            fn = &approxArsinh_lookup;break;
         case 2:
-            clock_gettime(CLOCK_MONOTONIC, &start); //Starting time clocking
-            result = asinh(x);
-            clock_gettime(CLOCK_MONOTONIC, &end); //Starting time clocking
-            time = end.tv_sec - start.tv_sec + 1e-9 * (end.tv_nsec - start.tv_nsec);
-            printf("Arsinh_Lookup finished, time taken: %lf\n", time);
-            break;
-            //case ..
-            //     ..
-            //     ..
+            fn = &asinh;break;
         default:
             print_help("The chosen version is not available!\n");
     }
 
-    clock_gettime(CLOCK_MONOTONIC, &endTotal); //Stop time clocking
-    timeTotal = endTotal.tv_sec - startTotal.tv_sec + 1e-9 * (endTotal.tv_nsec - startTotal.tv_nsec);
-    printf("Program has finished, total time taken:  %f\n", timeTotal);
+    /* This function will be run if the -B option was given
+     * Defined in utility.c */
+    if (analysis) runtime_analysis(fn, repetitions, x);
+    else run(fn, x); // else the chosen implementation will just be called
 
-    printf("Value of result = %lf\n", result);
-    printf("Value of result according to the posix function: %lf\n", asinh(x));
-    printf("finished\n");
     return 0;
 }
