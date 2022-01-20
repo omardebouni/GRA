@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
     handle(argc, argv, &version, &x, &analysis, &repetitions);
 
     /* A pointer to the implementation to be run according to the user */
-    double (*fn)(double);
+    double (*fn)(double) = NULL;
 
     switch (version) {
         case 0:

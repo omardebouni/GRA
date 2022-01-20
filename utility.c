@@ -40,7 +40,7 @@ void runtime_analysis(double (*fn)(double), double x, int repetitions) {
 
     for (int i = 1; i <= repetitions; i++){
         clock_gettime(CLOCK_MONOTONIC, &start); //Starting time clocking
-        result = approxArsinh_series(x);
+        result = (*fn)(x);
         clock_gettime(CLOCK_MONOTONIC, &end); //Starting time clocking
         time = end.tv_sec - start.tv_sec + 1e-9 * (end.tv_nsec - start.tv_nsec);
         printf("Iteration %d: Arsinh finished calculating in %lf seconds.\n", i, time);
@@ -89,8 +89,7 @@ void handle(int argc, char **argv, long *version, double *x, bool *analysis, lon
                 print_help(NULL);
                 break;
             default:
-                if ()
-                    print_help(NULL);
+                print_help(NULL);
         }
     }
     if (argc - optind == 1) {
