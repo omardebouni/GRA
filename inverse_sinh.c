@@ -104,12 +104,20 @@ double approxArsinh_lookup(double x) {
 
 
 double approxArsinh_series_V1(double x) {
-    double result = customLn(2*x);
-
-    for (int n = 1; n < 100; n++) {
-        result +=
-                sign(n - 1) * factorial(factorial(2*n-1)) /
-                ((2*n) * factorial(2*n) * customPow(x, 2*n));
+    double absX = customAbs(x);
+    double result = 0;
+    if (absX <= 1) {
+        for (int n = 0; n < ITERATIONS; n++) {
+            result += (sign(n) * customFactorial(2 * n) * customPow(x, 2 * n + 1) / customPow(2, 2 * n) *
+                       customPow(customFactorial(n), 2) * (2 * n + 1));
+        }
+    } else{
+        result = customLn(2*x);
+        for (int n = 1; n < 100; n++) {
+            result +=
+                    sign(n - 1) * factorial(factorial(2*n-1)) /
+                    ((2*n) * factorial(2*n) * customPow(x, 2*n));
+        }
     }
     return result;
 }
