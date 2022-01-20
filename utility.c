@@ -27,7 +27,7 @@ void run(double (*fn)(double), double x) {
  * the implementation for the number of times specified in the repetitions parameter.
  */
 void runtime_analysis(double (*fn)(double), double x, long repetitions) {
-    printf("Running a runtime analysis with %l repetitions...\n", repetitions);
+    printf("Running a runtime analysis with %ld repetitions...\n", repetitions);
     struct timespec startTotal;
     struct timespec endTotal;
     struct timespec start;
