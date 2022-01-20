@@ -49,7 +49,7 @@ void runtime_analysis(double (*fn)(double), double x, long repetitions) {
     timeTotal = endTotal.tv_sec - startTotal.tv_sec + 1e-9 * (endTotal.tv_nsec - startTotal.tv_nsec);
 
     printf("Result: %lf\n", result);
-    printf("Total time to run %d %s: %lf\n", repetitions, (repetitions>1) ? "iterations": "iteration", timeTotal);
+    printf("Total time to run %ld %s: %lf\n", repetitions, (repetitions>1) ? "iterations": "iteration", timeTotal);
 }
 
 /**
@@ -59,44 +59,44 @@ void runtime_analysis(double (*fn)(double), double x, long repetitions) {
  */
 void handle(int argc, char **argv, long *version, double *x, bool *analysis, long *repetitions) {
     if (argc < 2) print_help("No input was given. Please use the following format!\n");
-     /* Saves the read option */
-     char option;
-     int v_flag = 0, b_flag = 0; // User can only specify each option once
-     int testing = 0;
-     char *str_err;
- 
-     while ((option = getopt(argc, argv, ":V:B::ht")) != -1 && !testing) {
-         switch (option) {
-             case 'V':
-                 if (v_flag++ > 0) print_help("The version can only be set once!\n"); //End program
-                 *version = strtol(optarg, &str_err, 10);
-                 if (*str_err != '\0') print_help("The specified version couldn't be parsed!\n");
-                 break;
-             case 'B':
-                 if (b_flag++ > 0) print_help("The -B option can only be set once!\n"); //End program
-                 *analysis = true;
-                 if (optarg != NULL) {
-                     *repetitions = strtol(optarg, &str_err, 10);
-                     if (*str_err != '\0') print_help(NULL);
-                 }
-                 break;
-             case 't':
-                 testing++;
-                 run_test();
-                 break;
-             case ':':
-                 fprintf(stderr, "Argument für %c is missing!\n", optopt);
-                 print_help(NULL);
-                 break;
-             default:
-                 print_help(NULL);
-         }
-     }
-     if (argc - optind == 1) {
-         *x = strtof(argv[optind], &str_err);
-         if (*str_err != '\0')
-             print_help("The given value couldn't be parsed. Please use the following format!\n");
-     } else print_help(NULL);
+    /* Saves the read option */
+    char option;
+    int v_flag = 0, b_flag = 0; // User can only specify each option once
+    int testing = 0;
+    char *str_err;
+
+    while ((option = getopt(argc, argv, ":V:B::ht")) != -1 && !testing) {
+        switch (option) {
+            case 'V':
+                if (v_flag++ > 0) print_help("The version can only be set once!\n"); //End program
+                *version = strtol(optarg, &str_err, 10);
+                if (*str_err != '\0') print_help("The specified version couldn't be parsed!\n");
+                break;
+            case 'B':
+                if (b_flag++ > 0) print_help("The -B option can only be set once!\n"); //End program
+                *analysis = true;
+                if (optarg != NULL) {
+                    *repetitions = strtol(optarg, &str_err, 10);
+                    if (*str_err != '\0') print_help(NULL);
+                }
+                break;
+            case 't':
+                testing++;
+                run_test();
+                break;
+            case ':':
+                fprintf(stderr, "Argument für %c is missing!\n", optopt);
+                print_help(NULL);
+                break;
+            default:
+                print_help(NULL);
+        }
+    }
+    if (argc - optind == 1) {
+        *x = strtof(argv[optind], &str_err);
+        if (*str_err != '\0')
+            print_help("The given value couldn't be parsed. Please use the following format!\n");
+    } else print_help(NULL);
 }
 
 /**
