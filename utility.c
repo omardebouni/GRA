@@ -26,8 +26,8 @@ void run(double (*fn)(double), double x) {
  * the time it took to run the implementation, and the total time to run
  * the implementation for the number of times specified in the repetitions parameter.
  */
-void runtime_analysis(double (*fn)(double), double x, int repetitions) {
-    printf("Running a runtime analysis...\n");
+void runtime_analysis(double (*fn)(double), double x, long repetitions) {
+    printf("Running a runtime analysis with %l repetitions...\n", repetitions);
     struct timespec startTotal;
     struct timespec endTotal;
     struct timespec start;
@@ -38,18 +38,18 @@ void runtime_analysis(double (*fn)(double), double x, int repetitions) {
     double result = 0;
     clock_gettime(CLOCK_MONOTONIC, &startTotal); //Starting time clocking
 
-    for (int i = 1; i <= repetitions; i++){
+    for (long i = 1; i <= repetitions; i++){
         clock_gettime(CLOCK_MONOTONIC, &start); //Starting time clocking
         result = (*fn)(x);
         clock_gettime(CLOCK_MONOTONIC, &end); //Starting time clocking
         time = end.tv_sec - start.tv_sec + 1e-9 * (end.tv_nsec - start.tv_nsec);
-        printf("Iteration %d: Arsinh finished calculating in %lf seconds.\n", i, time);
+        printf("Iteration %l: Arsinh finished calculating in %lf seconds.\n", i, time);
     }
     clock_gettime(CLOCK_MONOTONIC, &endTotal); //Stop time clocking
     timeTotal = endTotal.tv_sec - startTotal.tv_sec + 1e-9 * (endTotal.tv_nsec - startTotal.tv_nsec);
 
     printf("Result: %lf\n", result);
-    printf("Total time to run %d %s: %lf\n", repetitions, (repetitions>1) ? "iterations": "iteration", timeTotal);
+    printf("Total time to run %l %s: %lf\n", repetitions, (repetitions>1) ? "iterations": "iteration", timeTotal);
 }
 
 /**
@@ -82,6 +82,7 @@ void handle(int argc, char **argv, long *version, double *x, bool *analysis, lon
                 printf("In -B\n");
                 if (b_flag++ > 0) print_help("The -B option can only be set once!\n"); //End program
                 *analysis = true;
+                printf("optarg is %s", optarg);
                 if (optarg != NULL) {
                     printf("I AM HEEEEEEEEEREEE ...........\n");
                     *repetitions = strtol(optarg, &str_err, 10);
