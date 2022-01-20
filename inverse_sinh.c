@@ -113,7 +113,7 @@ double approxArsinh_series_V1(double x) {
         }
     } else{
         result = customLn(2*x);
-        for (int n = 1; n < 100; n++) {
+        for (int n = 1; n < 500; n++) {
             result +=
                     sign(n - 1) * factorial(factorial(2*n-1)) /
                     ((2*n) * factorial(2*n) * customPow(x, 2*n));
