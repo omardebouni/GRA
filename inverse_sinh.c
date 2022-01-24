@@ -109,10 +109,26 @@ double approxArsinh_series_V1(double x) {
     double dividend, divisor;
     if (absX <= 1) {
         for (int n = 0; n < ITERATIONS; n++) {
-            dividend = sign(n) * customFactorial(2 * n) * customPow(x, 2 * n + 1);
-            divisor = customPow(2, 2 * n) * customPow(customFactorial(n), 2) * (2 * n + 1);
+            dividend = sign(n) * factorial(2 * n) * customPow(x, 2 * n + 1);
+            divisor = customPow(2, 2 * n) * customPow(factorial(n), 2) * (2 * n + 1);
             result += (dividend / divisor);
         }
-        return result;
-    } else return 1 + approxArsinh_series_V1(x / M_E);
+    } else if (x >= 1) {
+        for (int n = 1; n < ITERATIONS; n++) {
+            dividend = sign(n) * factorial(2 * n);
+            divisor = customPow(2, 2 * n) * customPow(factorial(n), 2) * (2 * n) * customPow(x, 2 * n);
+            result += (dividend / divisor);
+        }
+        result = lookup_ln(2 * x) - result;
+    } else if (x <= -1) {
+        for (int n = 0; n < ITERATIONS; n++) {
+            dividend = customPow(-1, n) * factorial(2 * n);
+            divisor = customPow(2, 2 * n) * customPow(factorial(n), 2) * (2 * n) * customPow(x, 2 * n);
+            if (divisor != 0) {
+                result += (dividend / divisor);
+            }
+        }
+        result = -lookup_ln(-2 * x) + result;
+    }
+    return result;
 }
