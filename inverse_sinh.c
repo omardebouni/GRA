@@ -17,7 +17,7 @@ double approxArsinh_series(double x) {
     double result = 0;
     double dividend, divisor;
     if (absX <= 1) {
-        for (long long int n = 0; n < ITERATIONS; n++) {
+        for (long int n = 0; n < ITERATIONS; n++) {
             dividend = sign(n) * customFactorial(2 * n) * customPow(x, 2 * n + 1);
             divisor = customPow(2, 2 * n) * customPow(customFactorial(n), 2) * (2 * n + 1);
             result += (dividend / divisor);
