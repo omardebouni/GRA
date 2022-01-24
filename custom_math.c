@@ -33,7 +33,7 @@ double customAbs(double x) {
 }
 
 /* Auxiliary function, returns 1 if n is even, -1 otherwise */
-int sign(int n) {
+long long sign(long long n) {
     return (n % 2 == 0) ? 1 : -1;
 }
 
