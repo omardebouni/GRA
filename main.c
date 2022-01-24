@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
         case 1:
             fn = &approxArsinh_lookup;break;
         case 2:
-            fn = &approxArsinh_series_V1;break;
+            break;
         case 3:
             fn = &asinh;break;
         default:
