@@ -1,6 +1,7 @@
 #include "custom_math.h"
 #include "inverse_sinh.h"
 #include <math.h>
+#include <stdio.h>
 
 #define M_E         2.71828182845904523536028747135266250
 #define ITERATIONS 25
