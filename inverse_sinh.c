@@ -114,5 +114,5 @@ double approxArsinh_series_V1(double x) {
             result += (dividend / divisor);
         }
         return result;
-    } else return 1 + approxArsinh_series_V2(x / M_E);
+    } else return 1 + approxArsinh_series_V1(x / M_E);
 }
