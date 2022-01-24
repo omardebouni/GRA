@@ -6,7 +6,7 @@
 
 int log_precision = 1000;
 /* Achtung! Funktioniert nur für positive ganzzahlige Exponente! */
-double customPow(double basis, int exponent) {
+double customPow(double basis, long long exponent) {
     double result = basis;
     if (exponent == 0)
         return 1;
@@ -14,17 +14,17 @@ double customPow(double basis, int exponent) {
         return 0;
     if (exponent == 1)
         return basis;
-    for (int i = 1; i < exponent; i++) {
+    for (long long i = 1; i < exponent; i++) {
         result *= basis;
     }
     return result;
 }
 
 /* Achtung! Negative Werte werden nicht behandelt! */
-unsigned long long customFactorial(unsigned long long x) {
+long long customFactorial(long long x) {
     if (x < 2) return 1;
-    unsigned long long res = x;
-    for (unsigned long long i = x-1; i > 1; i--) res *= i;
+    long long res = x;
+    for (long long i = x-1; i > 1; i--) res *= i;
     return res;
 }
 
