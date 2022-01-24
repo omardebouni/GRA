@@ -3,9 +3,7 @@
 #include <math.h>
 
 #define M_E         2.71828182845904523536028747135266250
-#define ITERATIONS 35
-
-#include "factorial.h"
+#define ITERATIONS 25
 
 
 
@@ -14,7 +12,7 @@ Reihendarstellung und gibt das Ergebnis zurück
 https://proofwiki.org/wiki/Power_Series_Expansion_for_Real_Area_Hyperbolic_Sine */
 double approxArsinh_series(double x) {
     double result = 0;
-    long int n = 0;
+    int n = 0;
     if (x <=1 && x >= -1) {
         while (n < ITERATIONS) {
             result += (sign(n) * customFactorial(2 * n) * customPow(x, 2 * n + 1) /
@@ -89,36 +87,4 @@ double lookup_ln(double x) {
 double approxArsinh_lookup(double x) {
     x += customSqrt(customPow(x, 2) + 1); // x + sqrt(x^2 + 1)
     return lookup_ln(x); // ln(x + sqrt(x^2 + 1))
-}
-
-
-
-double approxArsinh_series_V1(double x) {
-    double absX = customAbs(x);
-    double result = 0;
-    double dividend, divisor;
-    if (absX <= 1) {
-        for (long long n = 0; n < ITERATIONS; n++) {
-            dividend = sign(n) * customFactorial(2 * n) * customPow(x, 2 * n + 1);
-            divisor = customPow(2, 2 * n) * customPow(customFactorial(n), 2) * (2 * n + 1);
-            result += (dividend / divisor);
-        }
-    } else if (x >= 1) {
-        for (long long n = 1; n < ITERATIONS; n++) {
-            dividend = sign(n) * customFactorial(2 * n);
-            divisor = customPow(2, 2 * n) * customPow(customFactorial(n), 2) * (2 * n) * customPow(x, 2 * n);
-            result += (dividend / divisor);
-        }
-        result = lookup_ln(2 * x) - result;
-    } else if (x <= -1) {
-        for (long long n = 0; n < ITERATIONS; n++) {
-            dividend = customPow(-1, n) * customFactorial(2 * n);
-            divisor = customPow(2, 2 * n) * customPow(customFactorial(n), 2) * (2 * n) * customPow(x, 2 * n);
-            if (divisor != 0) {
-                result += (dividend / divisor);
-            }
-        }
-        result = -lookup_ln(-2 * x) + result;
-    }
-    return result;
 }
