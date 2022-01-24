@@ -16,25 +16,18 @@ double approxArsinh_series(double x) {
     int n = 0;
     if (x <=1 && x >= -1) {
         while (n < ITERATIONS) {
-            printf("Iterat num %d\n", n);
-            printf("res is %lf\n", result);
-            result += (sign(n) * customFactorial(2 * n) * customPow(x, 2 * n + 1) /
-                    customPow(2, 2 * n) * customPow(customFactorial(n), 2) * (2 * n + 1));
+            result += (sign(n) * customFactorial(2 * n) * customPow(x, 2 * n + 1)) /
+                    (customPow(2, 2 * n) * customPow(customFactorial(n), 2) * (2 * n + 1));
             n++;
         }
     } else {
         while (++n < ITERATIONS) {
-            printf("Iterat num %d\n", n);
-            printf("res is %lf\n", result);
-            result += (sign(n) * customFactorial(2 * n) / customPow(2, 2 * n) *
+            result += (sign(n) * customFactorial(2 * n)) / (customPow(2, 2 * n) *
                     customPow(customFactorial(n), 2) * (2 * n) * customPow(x, 2*n));
         }
-        printf("Iterat num %d\n", n);
-        printf("res before is %lf\n", result);
         if (x > 1) result = customLn(2 * x) - result;
         else result = -customLn(-2 * x) + result;
     }
-            printf("res is %lf\n", result);
     return result;
 }
 /**
