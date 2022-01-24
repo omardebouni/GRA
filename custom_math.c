@@ -21,10 +21,10 @@ double customPow(double basis, int exponent) {
 }
 
 /* Achtung! Negative Werte werden nicht behandelt! */
-int customFactorial(int x) {
+unsigned long long customFactorial(unsigned long long x) {
     if (x < 2) return 1;
-    int res = x;
-    for (int i = x-1; i > 1; i--) res *= i;
+    unsigned long long res = x;
+    for (unsigned long long i = x-1; i > 1; i--) res *= i;
     return res;
 }
 
