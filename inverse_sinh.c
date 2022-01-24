@@ -13,7 +13,7 @@ Reihendarstellung und gibt das Ergebnis zurück
 https://proofwiki.org/wiki/Power_Series_Expansion_for_Real_Area_Hyperbolic_Sine */
 double approxArsinh_series(double x) {
     double result = 0;
-    long int n = 0;
+    long long n = 0;
     if (x <=1 && x >= -1) {
         while (n < ITERATIONS) {
             result += (sign(n) * customFactorial(2 * n) * customPow(x, 2 * n + 1)) /
