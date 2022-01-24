@@ -3,7 +3,7 @@
 #include <math.h>
 
 #define M_E         2.71828182845904523536028747135266250
-#define ITERATIONS 25
+#define ITERATIONS 35
 
 #include "factorial.h"
 
