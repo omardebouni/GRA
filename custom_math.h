@@ -1,5 +1,5 @@
 double customPow(double basis, int exponent);
-int customFactorial(int x);
+unsigned long long customFactorial(unsigned long long x);
 double customAbs(double x);
 int sign(int n);
 double customLn(double x);
