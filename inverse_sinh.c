@@ -17,20 +17,20 @@ double approxArsinh_series(double x) {
     double result = 0;
     double dividend, divisor;
     if (absX <= 1) {
-        for (unsigned long long n = 0; n < ITERATIONS; n++) {
+        for (long long int n = 0; n < ITERATIONS; n++) {
             dividend = sign(n) * customFactorial(2 * n) * customPow(x, 2 * n + 1);
             divisor = customPow(2, 2 * n) * customPow(customFactorial(n), 2) * (2 * n + 1);
             result += (dividend / divisor);
         }
     } else if (x >= 1) {
-        for (unsigned long long n = 1; n < ITERATIONS; n++) {
+        for (long long n = 1; n < ITERATIONS; n++) {
             dividend = sign(n) * customFactorial(2 * n);
             divisor = customPow(2, 2 * n) * customPow(customFactorial(n), 2) * (2 * n) * customPow(x, 2 * n);
             result += (dividend / divisor);
         }
         result = customLn(2 * x) - result;
     } else if (x <= -1) {
-        for (unsigned long long n = 0; n < ITERATIONS; n++) {
+        for (long long n = 0; n < ITERATIONS; n++) {
             dividend = customPow(-1, n) * customFactorial(2 * n);
             divisor = customPow(2, 2 * n) * customPow(customFactorial(n), 2) * (2 * n) * customPow(x, 2 * n);
             if (divisor != 0) {
@@ -108,20 +108,20 @@ double approxArsinh_series_V1(double x) {
     double result = 0;
     double dividend, divisor;
     if (absX <= 1) {
-        for (unsigned long long n = 0; n < ITERATIONS; n++) {
+        for (long long n = 0; n < ITERATIONS; n++) {
             dividend = sign(n) * customFactorial(2 * n) * customPow(x, 2 * n + 1);
             divisor = customPow(2, 2 * n) * customPow(customFactorial(n), 2) * (2 * n + 1);
             result += (dividend / divisor);
         }
     } else if (x >= 1) {
-        for (unsigned long long n = 1; n < ITERATIONS; n++) {
+        for (long long n = 1; n < ITERATIONS; n++) {
             dividend = sign(n) * customFactorial(2 * n);
             divisor = customPow(2, 2 * n) * customPow(customFactorial(n), 2) * (2 * n) * customPow(x, 2 * n);
             result += (dividend / divisor);
         }
         result = lookup_ln(2 * x) - result;
     } else if (x <= -1) {
-        for (unsigned long long n = 0; n < ITERATIONS; n++) {
+        for (long long n = 0; n < ITERATIONS; n++) {
             dividend = customPow(-1, n) * customFactorial(2 * n);
             divisor = customPow(2, 2 * n) * customPow(customFactorial(n), 2) * (2 * n) * customPow(x, 2 * n);
             if (divisor != 0) {
