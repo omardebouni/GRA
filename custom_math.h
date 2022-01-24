@@ -1,7 +1,7 @@
-double customPow(double basis, int exponent);
-unsigned long long customFactorial(unsigned long long x);
+double customPow(double basis, long long exponent);
+long long customFactorial(long long x);
 double customAbs(double x);
-int sign(int n);
+long long sign(long long n);
 double customLn(double x);
 double customSqrt(double x);
 double customFloor(double x);
