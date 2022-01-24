@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 #define M_E         2.71828182845904523536028747135266250
-#define ITERATIONS 35
+#define ITERATIONS 10
 
 
 
