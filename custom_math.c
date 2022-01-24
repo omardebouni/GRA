@@ -3,7 +3,7 @@
 
 #define LOG_PRECISION  1000
 /* Achtung! Funktioniert nur für positive ganzzahlige Exponente! */
-double customPow(double basis, long int exponent) {
+double customPow(double basis,int exponent) {
     if (exponent == 0)
         return 1;
     if (basis == 0)
@@ -12,16 +12,16 @@ double customPow(double basis, long int exponent) {
         return basis;
 
     double result = basis;
-    while (exponent-- > 1){
+    while (--exponent > 0){
         result *= basis;
     }
     return result;
 }
 
 /* Achtung! Negative Werte werden nicht behandelt! */
-long int customFactorial(long int x) {
+int customFactorial(int x) {
     if (x < 2) return 1;
-    long res = x, i = x-1;
+    int res = x, i = x-1;
     while (i > 1) {
         res *= i--;
     }
@@ -32,8 +32,8 @@ double customAbs(double x) {
     return (x > 0) ? x : -x;
 }
 
-/* Auxiliary function, returns 1 if n is even, -1 otherwise */
-int sign(long n) {
+/* Returns +1 if n is even, -1 if n is odd */
+int sign(int n) {
     return (n % 2 == 0) ? 1 : -1;
 }
 
