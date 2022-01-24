@@ -1,30 +1,30 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include "custom_math.h"
-
 #include <math.h> // Only to get -INFINITY without generating errors!
 
-int log_precision = 1000;
+#define LOG_PRECISION  1000
 /* Achtung! Funktioniert nur für positive ganzzahlige Exponente! */
-double customPow(double basis, long long exponent) {
-    double result = basis;
+double customPow(double basis, long int exponent) {
     if (exponent == 0)
         return 1;
     if (basis == 0)
         return 0;
     if (exponent == 1)
         return basis;
-    for (long long i = 1; i < exponent; i++) {
+
+    double result = basis;
+    while (exponent-- > 1){
         result *= basis;
     }
     return result;
 }
 
 /* Achtung! Negative Werte werden nicht behandelt! */
-long long customFactorial(long long x) {
+long int customFactorial(long int x) {
     if (x < 2) return 1;
-    long long res = x;
-    for (long long i = x-1; i > 1; i--) res *= i;
+    long res = x, i = x-1;
+    while (i > 1) {
+        res *= i--;
+    }
     return res;
 }
 
@@ -44,7 +44,7 @@ double customLn(double x){
     double res = 1.0;
     double y = (x-1)/(x+1);
     int even = 2, odd = 3;
-    for (; even < log_precision; even += 2, odd += 2) {
+    for (; even < LOG_PRECISION; even += 2, odd += 2) {
         res += (customPow(y, even) / odd);
     }
     return 2 * y * res;
