@@ -205,7 +205,7 @@ void run_test() {
                 fn = &approxArsinh_lookup;
                 break;
             case 3:
-                //fn = &approxArsinh_series_V1;
+                fn = &approxArsinh_series_V1;
                 break;
             default:
                 fn = &approxArsinh_series;
