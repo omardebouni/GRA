@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
         case 1:
             fn = &approxArsinh_lookup;break;
         case 2:
-            break;
+            fn = &approxArsinh_series_V1;break;
         case 3:
             fn = &asinh;break;
         default:
@@ -48,6 +48,8 @@ int main(int argc, char **argv) {
      * Defined in utility.c */
     if (analysis) runtime_analysis(fn, x, repetitions);
     else run(fn, x); // else the chosen implementation will just be called
+
+    printf("expected %lf\n", asinh(x));
 
     return 0;
 }
