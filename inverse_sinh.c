@@ -90,7 +90,7 @@ double approxArsinh_lookup(double x) {
     return lookup_ln(x); // ln(x + sqrt(x^2 + 1))
 }
 
-double approxArsinh_series(double x) {
+double approxArsinh_series_V1(double x) {
     double result = 0;
     int n = 0;
     while (n++ < 4) {
