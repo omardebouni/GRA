@@ -218,7 +218,7 @@ void run_test() {
         printf("Running test for values in [%lf, %lf]\nStep size: %lf\nAccuracy:%lf\n", a, b, step_size, epsilon);
 
         failed = 0;
-        total = (b - a) * 1 / step_size;
+        total = (b - a) * 1 / step_size + 1;
 
         struct timespec startTime;
         struct timespec endTime;
