@@ -99,5 +99,5 @@ double approxArsinh_series_V1(double x) {
         unten = 2*n * customDoubleFac(2*n) * customPow(x,2*n);
         result += sign(n-1) * oben/unten;
     }
-    return result + log(2*x);
+    return result + customLn(2*x);
 }

@@ -81,4 +81,5 @@ long customDoubleFac(int n) {
         else
             result *= i;
     }
+    return 0;
 }

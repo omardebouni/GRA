@@ -228,7 +228,12 @@ void run_test() {
         for (double i = a; i <= b; i += step_size) {
             got = (*fn)(i);
             expected = asinh(i);
-            if (customAbs(got - expected) >= epsilon) {
+            if (got == NAN || got == -NAN) {
+                failed++;
+                printf("asinh(%lf):\n\tGot:      %lf\n\tExpected: %lf\n", i, got, expected);
+                continue;
+            }
+            else if (customAbs(got - expected) >= epsilon) {
                 failed++;
                 if (print) printf("asinh(%lf):\n\tGot:      %lf\n\tExpected: %lf\n", i, got, expected);
             }
