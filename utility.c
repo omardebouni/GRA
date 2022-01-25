@@ -167,6 +167,7 @@ void run_test() {
     int total, failed;
     char buf[10];
     double got, expected;
+    bool predicate;
     while (!end) {
         printf("Choose the implementation you would like to test:\n\t");
         printf("1: The default version of the series_expansion implementation\n\t");
@@ -228,7 +229,9 @@ void run_test() {
         for (double i = a; i <= b; i += step_size) {
             got = (*fn)(i);
             expected = asinh(i);
-            if (expected != got) { //customAbs(got - expected) >= epsilon
+            if (epsilon == 0) predicate = (got != expected);
+            else predicate = customAbs(got - expected) >= epsilon;
+            if (predicate) { //customAbs(got - expected) >= epsilon
                 failed++;
                 if (print) printf("asinh(%lf):\n\tGot:      %lf\n\tExpected: %lf\n", i, got, expected);
             }
