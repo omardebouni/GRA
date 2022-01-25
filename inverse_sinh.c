@@ -93,7 +93,7 @@ double approxArsinh_lookup(double x) {
 double approxArsinh_series_V1(double x) {
     double result = 0;
     int n = 0;
-    while (n++ < 4) {
+    while (n++ < 3) {
         if (sign(n-1)) result += ((customFactorial(customFactorial(2*n-1))) / (2*n*customFactorial(customFactorial(2*n)) * customPow(x, 2*n)));
         else result -= ((customFactorial(customFactorial(2*n-1))) / (2*n*customFactorial(customFactorial(2*n)) * customPow(x, 2*n)));
     }
