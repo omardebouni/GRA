@@ -1,5 +1,6 @@
 #include "alternatives.h"
-
+#include "custom_math.h"
+#include <math.h>
 
 /**
  * Here are some of the past versions of the inverse sinh function.
