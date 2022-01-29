@@ -10,6 +10,7 @@
 #include <string.h>
 #include <getopt.h>
 #include <math.h>
+#include "alternatives.h"
 
 
 /**
@@ -18,7 +19,7 @@
  */
 void run(double (*fn)(double), double x) {
     double result = (*fn)(x); // call the given function on the given x value
-    printf("Arsinh(%lf) = %lf\n", x, result);
+    printf("Arsinh(%lf) = %.20lf\n", x, result);
 }
 
 /**
@@ -109,14 +110,15 @@ void print_help(char *message) {
                      "Usage: ./main <float>\n\n"
                      "Options:\n\t"
                      "-V<int>\t-- The implementation that should be used.\n\t"
-                     "       \t   Possible inputs: V0-V3\n\t"
-                     "       \t   If no version was given, version 0 will be used\n\t"
-                     "       \t   as default. Version 1 is the one with a lookup table\n\n\t"
+                     "       \t   Possible inputs: V0-V5\n\t"
+                     "       \t   If no version was given, default implementation will be used.\n\t"
+                     "       \t   Version 0 is default, Version 1 uses a lookup table.\n\t"
+                     "       \t   Versions 2-4 are old (worse) implementations. 5 is the one from <math.h>\n\n\t"
                      "-B<int>\t-- When set, a runtime analysis will be executed\n\t"
                      "       \t   and the measured time will be outputted. The argument of\n\t"
                      "       \t   this option is optional. It specifies the number of repetitions\n\n\t"
                      "-t     \t   When used, a testing program will run. The program will ask\n\t"
-                     "       \t   user to enter some variables and series of tests will be run\n\t"
+                     "       \t   user to enter some variables and a series of tests will be run\n\t"
                      "       \t   in a given interval with given step size. Finally test result\n\t"
                      "       \t   as well as total time to run wil be outputted\n\n\t"
                      "-h     \t-- Prints the help message that describes all the options\n\t"
@@ -169,9 +171,12 @@ void run_test() {
     double got, expected;
     while (!end) {
         printf("Choose the implementation you would like to test:\n\t");
-        printf("1: The default version of the series_expansion implementation\n\t");
-        printf("2: The lookup implementation\n\t");
-        printf("3: The second version of the series_expansion implementation\nEnter number: ");
+        printf("0: The default version of the series_expansion implementation, (Most efficient/accurate)\n\t");
+        printf("1: The lookup implementation\n\t");
+        printf("2: The initial version of the series_expansion implementation (Very slow)\n\t");
+        printf("3: The efficient and more accurate version of the series_expansion implementation\n\t");
+        printf("4: Even more accurate version of the series_expansion implementation\n\t");
+        printf("5: asinh() function from <math.hh>\n\nEnter number: ");
         read_int(&version);
         printf("Enter the desired accuracy to compare with: ");
         read_double(&epsilon);
@@ -198,14 +203,23 @@ void run_test() {
         double (*fn)(double) = NULL;
 
         switch (version) {
-            case 1:
+            case 0:
                 fn = &approxArsinh_series;
                 break;
-            case 2:
+            case 1:
                 fn = &approxArsinh_lookup;
                 break;
+            case 2:
+                fn = &approxArsinh_series_V2;
+                break;
             case 3:
-                fn = &approxArsinh_series_V1;
+                fn = &approxArsinh_series_V3;
+                break;
+            case 4:
+                fn = &approxArsinh_series_V4;
+                break;
+            case 5:
+                fn = &asinh;
                 break;
             default:
                 fn = &approxArsinh_series;
@@ -214,7 +228,7 @@ void run_test() {
         }
 
         if (system("clear") == -1)exit(-1); // just to silence warning
-        printf("Running test for values in [%lf, %lf]\nStep size: %lf\nAccuracy:%lf\n", a, b, step_size, epsilon);
+        printf("Running test for values in [%lf, %lf]\nAccuracy: %lf\nStep size: %lf\n", a, b,epsilon, step_size);
 
         failed = 0;
         total = (b - a) * 1 / step_size + 1;
@@ -228,14 +242,10 @@ void run_test() {
         for (double i = a; i <= b; i += step_size) {
             got = (*fn)(i);
             expected = asinh(i);
-            if (got == NAN || got == -NAN) {
-                failed++;
-                printf("asinh(%lf):\n\tGot:      %lf\n\tExpected: %lf\n", i, got, expected);
-                continue;
-            }
-            else if (customAbs(got - expected) >= epsilon) {
+            if ((got != got) || (customAbs(got) == INFINITY && expected != got) || (customAbs(got - expected) >= epsilon)) {
                 failed++;
                 if (print) printf("asinh(%lf):\n\tGot:      %lf\n\tExpected: %lf\n", i, got, expected);
+                continue;
             }
         }
 
@@ -256,15 +266,4 @@ void run_test() {
     }
     printf("Analysis ended.\n");
     exit(0);
-}
-
-/*
-Create Lookuptable with Posix Function not optimized
-*/
-long double table[256];
-
-void createPosixCompare() {
-    for (int i = 0; i < 256; i++) {
-        table[i] = asinhl(2.0 * 3.1415927 * (float) i / 256.0);
-    }
 }

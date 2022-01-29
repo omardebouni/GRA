@@ -4,9 +4,10 @@
 #include <math.h>
 #include "utility.h"
 #include "inverse_sinh.h"
+#include "custom_math.h"
+#include "alternatives.h"
 
 
-// TODO: Accept negative values?
 
 /**
  * The main method will just start the program and call
@@ -37,8 +38,12 @@ int main(int argc, char **argv) {
         case 1:
             fn = &approxArsinh_lookup;break;
         case 2:
-            fn = &approxArsinh_series_V1;break;
+            fn = &approxArsinh_series_V2;break;
         case 3:
+            fn = &approxArsinh_series_V3;break;
+        case 4:
+            fn = &approxArsinh_series_V4;break;
+        case 5:
             fn = &asinh;break;
         default:
             print_help("The chosen version is not available!\n");

@@ -1,9 +1,13 @@
 double customPow(double basis, int exponent);
-long long customFactorial(int x);
+long long customFac(int x);
 double customAbs(double x);
 long long sign(int n);
 double customLn(double x);
 double customSqrt(double x);
 double customFloor(double x);
-double customCeil(double x);
-long customDoubleFac(int n);
+long long customDoubleFac(int n);
+long roundToLong(double x);
+double customExp(double x);
+double customLn_V1(double x);
+long long halfFac(int n);
+double customPow2(int n);
