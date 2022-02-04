@@ -3,7 +3,7 @@
 #include <math.h>
 
 #define M_E         2.71828182845904523536028747135266250
-#define ITERATIONS 10
+#define LN_10 2.30258509299404590109361379290930926799774169921875
 
 /**
  * This method approximates the inverse hyperbolic sine using 2 different series
@@ -67,6 +67,7 @@ int index_of(double x) {
  * with a step size of 0.01
  */
 double get_closest_entry(double x) {
+    if (x >= 9.999) return 9.999;
     x *= 1000;
     double floored = customFloor(x);
     if ((x - floored) < 0.5) return floored / 1000;
@@ -88,41 +89,30 @@ double get_closest_entry(double x) {
  * step size of 0.01, then the closest value will be returned from the table
  */
 double lookup_ln(double x) {
+//    if (x < 0) {
+//        error("lookup_ln() function is not defined for negative values! Returning -1");
+//        return -1;
+//    }
     if (x == 0) return -INFINITY;
-    if (x < 1) return -1 + lookup_ln(x * M_E);
-    else if (x > 10) return 1 + lookup_ln(x / M_E);
+//    if (x == 1) return 0;
 
-    //recursion base
-    if (x <= 1.001) return ln_table[index_of(get_closest_entry(x))];
+    double result = 0.0;
 
-    double closest_entry = get_closest_entry(x);
-    return ln_table[index_of(closest_entry)] + lookup_ln(1 + customAbs(x - closest_entry) / closest_entry);
+    while (x < 1) {
+        result -= LN_10;
+        x *= 10;
+    }
+//    while (x > 9.999) {
+//        result += LN_10;
+//        x /= 10;
+//    }
+
+    double closest_entry;
+    while (x > 1.001) {
+        closest_entry = get_closest_entry(x);
+        result += ln_table[index_of(closest_entry)];
+        x = 1 +  customAbs(x - closest_entry) / closest_entry;
+    }
+//    closest_entry = get_closest_entry(x);
+    return result; // ln_table[index_of(closest_entry)]
 }
-
-
-
-
-
-//5. Version
-// 3decimal places
-//Total tests passed: 19998939/20000001
-//Total time to run all tests:  2.835520 seconds
-
-//4. Version
-//3decimal places
-//Total tests passed: 19998875/20000001
-//Total time to run all tests:  7.995230 seconds
-
-//3. Version
-//3decimal places
-//Total tests passed: 19998019/20000001
-//Total time to run all tests:  7.604277 seconds
-
-//2. Version
-//3decimal places
-//Total tests passed: 19638840/20000001
-//Total time to run all tests:  3.701794 seconds
-
-
-
-// for 2 decimal places all versions passed all tests.

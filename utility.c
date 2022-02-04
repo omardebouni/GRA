@@ -20,6 +20,7 @@
 void run(double (*fn)(double), double x) {
     double result = (*fn)(x); // call the given function on the given x value
     printf("Arsinh(%lf) = %.20lf\n", x, result);
+    printf("expected %.20lf\n", asinh(x));
 }
 
 /**
@@ -31,26 +32,21 @@ void runtime_analysis(double (*fn)(double), double x, long repetitions) {
     printf("Running a runtime analysis...\n");
     struct timespec startTotal;
     struct timespec endTotal;
-    struct timespec start;
-    struct timespec end;
-    double time;
     double timeTotal;
 
     double result = 0;
     clock_gettime(CLOCK_MONOTONIC, &startTotal); //Starting time clocking
 
     for (int i = 1; i <= repetitions; i++) {
-        clock_gettime(CLOCK_MONOTONIC, &start); //Starting time clocking
         result = (*fn)(x);
-        clock_gettime(CLOCK_MONOTONIC, &end); //Starting time clocking
-        time = end.tv_sec - start.tv_sec + 1e-9 * (end.tv_nsec - start.tv_nsec);
-        printf("Iteration %d: Arsinh finished calculating in %lf seconds.\n", i, time);
     }
     clock_gettime(CLOCK_MONOTONIC, &endTotal); //Stop time clocking
     timeTotal = endTotal.tv_sec - startTotal.tv_sec + 1e-9 * (endTotal.tv_nsec - startTotal.tv_nsec);
 
-    printf("Result: %lf\n", result);
-    printf("Total time to run %ld %s: %lf\n", repetitions, (repetitions > 1) ? "iterations" : "iteration", timeTotal);
+    printf("Arsinh(%lf) = %.20lf\n", x, result);
+    printf("expected %.20lf\n", asinh(x));;
+
+    printf("Total time to run %ld %s: %.10lf seconds\n", repetitions, (repetitions > 1) ? "iterations" : "iteration", timeTotal);
 }
 
 /**
@@ -107,7 +103,7 @@ void handle(int argc, char **argv, long *version, double *x, bool *analysis, lon
 void print_help(char *message) {
     if (message != NULL) fprintf(stderr, "%s", message);
     char *help_msg = "Default: \n\t"
-                     "Usage: ./main <float>\n\n"
+                     "Usage: ./arsinh <float>\n\n"
                      "Options:\n\t"
                      "-V<int>\t-- The implementation that should be used.\n\t"
                      "       \t   Possible inputs: V0-V5\n\t"
@@ -124,13 +120,13 @@ void print_help(char *message) {
                      "-h     \t-- Prints the help message that describes all the options\n\t"
                      "--help \t   of the program, and gives examples on how to use it.\n\n\t"
                      "Usage: ./main <float> -V<int> -B<int> \n\t\t    "
-                     "./main -h\n\n"
+                     "./arsinh -h\n\n"
                      "Examples:\n\t"
-                     "./main 2.0\n\t"
-                     "./main -t\n\t"
-                     "./main -V0 -- -1.5 (For negative inputs a -- needs to be used before the input value)\n\t"
-                     "./main -V2 3.14159 -B\n\t"
-                     "./main 5 -B2\n";
+                     "./arsinh 2.0\n\t"
+                     "./arsinh -t\n\t"
+                     "./arsinh -V0 -- -1.5 (For negative inputs a -- needs to be used before the input value)\n\t"
+                     "./arsinh -V2 3.14159 -B\n\t"
+                     "./arsinh 5 -B2\n";
     fprintf(stderr, "%s", help_msg);
     exit(1);
 }
@@ -169,6 +165,9 @@ void run_test() {
     int total, failed;
     char buf[10];
     double got, expected;
+    /* A pointer to the implementation to be run according to the user */
+    double (*fn)(double) = NULL;
+    double (*compare)(double) = &sinh; // default if testing sinh approximations
     while (!end) {
         printf("Choose the implementation you would like to test:\n\t");
         printf("0: The default version of the series_expansion implementation, (Most efficient/accurate)\n\t");
@@ -176,7 +175,9 @@ void run_test() {
         printf("2: The initial version of the series_expansion implementation (Very slow)\n\t");
         printf("3: The efficient and more accurate version of the series_expansion implementation\n\t");
         printf("4: Even more accurate version of the series_expansion implementation\n\t");
-        printf("5: asinh() function from <math.hh>\n\nEnter number: ");
+        printf("5: asinh() function from <math.h>\n\t");
+        printf("6: test lookup_ln() against log() from <math.h>\n\t");
+        printf("7: test customLn against log() from <math.h>\n\nEnter number: ");
         read_int(&version);
         printf("Enter the desired accuracy to compare with: ");
         read_double(&epsilon);
@@ -186,7 +187,10 @@ void run_test() {
         read_double(&b);
         printf("Enter step size: ");
         read_double(&step_size);
-
+        if (a > b || step_size == 0) {
+            printf("Can't run tests for given arguments\n");
+            return;
+        }
         while (1) {
             printf("Print failed values? (yes/no)\n");
             read_str(buf);
@@ -199,8 +203,6 @@ void run_test() {
             }
         }
 
-        /* A pointer to the implementation to be run according to the user */
-        double (*fn)(double) = NULL;
 
         switch (version) {
             case 0:
@@ -221,14 +223,25 @@ void run_test() {
             case 5:
                 fn = &asinh;
                 break;
+            case 6:
+                fn = &lookup_ln;
+                compare = &log;
+                break;
+            case 7:
+                fn = &customLn_V1;
+                compare = &log;
+                break;
             default:
+                version = 0;
                 fn = &approxArsinh_series;
                 printf("The chosen version doesn't exist. Running the default version of the series_expansion implementation\n");
                 break;
         }
 
+        if
+
         if (system("clear") == -1)exit(-1); // just to silence warning
-        printf("Running test for values in [%lf, %lf]\nAccuracy: %lf\nStep size: %lf\n", a, b,epsilon, step_size);
+        printf("Running test for values in [%lf, %lf]\nAccuracy: %lf\nStep size: %lf\nVersion: %d\n", a, b,epsilon, step_size, version);
 
         failed = 0;
         total = (b - a) * 1 / step_size + 1;
@@ -241,10 +254,10 @@ void run_test() {
 
         for (double i = a; i <= b; i += step_size) {
             got = (*fn)(i);
-            expected = asinh(i);
+            expected = (*compare)(i);
             if ((got != got) || (customAbs(got) == INFINITY && expected != got) || (customAbs(got - expected) >= epsilon)) {
                 failed++;
-                if (print) printf("asinh(%lf):\n\tGot:      %lf\n\tExpected: %lf\n", i, got, expected);
+                if (print) printf("%s(%lf):\n\tGot:      %lf\n\tExpected: %lf\n",(version > 5)? "ln":"arsinh", i, got, expected);
                 continue;
             }
         }

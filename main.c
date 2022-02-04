@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
     double x;
     /* When set, a runtime analysis will be called, and the measured times will be outputted */
     bool analysis = false;
-    long repetitions = 1; //default
+    long repetitions = 10000000; //default
 
     /* This will handle all the user inputs/options and update the variables above
      * Defined in utility.c */
@@ -53,8 +53,6 @@ int main(int argc, char **argv) {
      * Defined in utility.c */
     if (analysis) runtime_analysis(fn, x, repetitions);
     else run(fn, x); // else the chosen implementation will just be called
-
-    printf("expected %lf\n", asinh(x));
 
     return 0;
 }

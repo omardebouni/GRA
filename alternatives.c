@@ -89,7 +89,7 @@ double approxArsinh_series_V4(double x) {
     if (absX <= 1) {
         while (1) {
             dividend = (sign(n) * halfFac(2 * n) * customPow(x, 2 * n + 1));
-            divisor = (customPow(2, 2 * n) * customFac(n) * (2 * n + 1));
+            divisor = (customPow2(2*n) * customFac(n) * (2 * n + 1));
             if (divisor == 0 || customAbs(divisor) == INFINITY) break; // check if factorial passed
             temp += dividend / divisor;
             if (customAbs(temp) == INFINITY || temp != temp || temp == result) break; //if inf, -inf or NaN

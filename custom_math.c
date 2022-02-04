@@ -101,7 +101,6 @@ double customFloor(double x) {
     return (x > 0) ? (long int) x : (long int) (x - 1);
 }
 
-//TODO: check if n is too big
 
 /**
  * This method implements the double factorial function.
@@ -204,10 +203,10 @@ long long halfFac(int n_2) {
     if (n_2 > 28) return 0;
     if (n_2 < 2) return 1;
 
-    int n = n_2 / 2 ; // calculates n
-    long long result = n + 1;
+    int n = n_2 / 2 + 1; // calculates n
+    long long result = n;
 
-    while (++n < n_2) { // res = (n+1) * (n+2) * (n+3) * ... * (2n)
+    while (++n <= n_2) { // res = (n+1) * (n+2) * (n+3) * ... * (2n)
         result *= (n);
     }
     return result;
