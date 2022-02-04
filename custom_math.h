@@ -1,3 +1,4 @@
+double ln(double x);
 double customPow(double basis, int exponent);
 long long customFac(int x);
 double customAbs(double x);
@@ -11,3 +12,4 @@ double customExp(double x);
 double customLn_V1(double x);
 long long halfFac(int n);
 double customPow2(int n);
+

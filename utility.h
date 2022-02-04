@@ -9,4 +9,3 @@ void handle(int argc, char **argv, long *version, double *x, bool *analysis, lon
 void runtime_analysis(double (*fn)(double), double x, long repetitions);
 
 void run(double (*fn)(double), double x);
-
