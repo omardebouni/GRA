@@ -167,7 +167,7 @@ void run_test() {
     double got, expected;
     /* A pointer to the implementation to be run according to the user */
     double (*fn)(double) = NULL;
-    double (*compare)(double) = &sinh; // default if testing sinh approximations
+    double (*compare)(double) = NULL; 
     while (!end) {
         printf("Choose the implementation you would like to test:\n\t");
         printf("0: The default version of the series_expansion implementation, (Most efficient/accurate)\n\t");
@@ -203,7 +203,7 @@ void run_test() {
             }
         }
 
-
+		compare = &asinh; //set back to default
         switch (version) {
             case 0:
                 fn = &approxArsinh_series;
@@ -224,7 +224,7 @@ void run_test() {
                 fn = &asinh;
                 break;
             case 6:
-                fn = &lookup_ln;
+                fn = &ln;
                 compare = &log;
                 break;
             case 7:
@@ -238,7 +238,6 @@ void run_test() {
                 break;
         }
 
-        if
 
         if (system("clear") == -1)exit(-1); // just to silence warning
         printf("Running test for values in [%lf, %lf]\nAccuracy: %lf\nStep size: %lf\nVersion: %d\n", a, b,epsilon, step_size, version);
